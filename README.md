@@ -7,7 +7,7 @@
 Free browser games, built in the open. Every game is a plain HTML page, runs on desktop and phones, and is made by a named contributor.
 
 <!-- STATS:START -->
-![Games](https://img.shields.io/badge/games-3-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
+![Games](https://img.shields.io/badge/games-0-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
 <!-- STATS:END -->
 
 **Play:** https://sarvan-2187.github.io/kaizen-games-collective/
