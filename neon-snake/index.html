@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Neon Snake</title>
+<style>
+  *{box-sizing:border-box;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;height:100%;overflow:hidden;background:#070712;color:#e8f9ff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none;overscroll-behavior:none}
+  body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+  #bar{display:flex;gap:18px;font-weight:700;letter-spacing:.08em;text-shadow:0 0 10px #22d3ee}
+  #bar span{color:#f472b6}
+  canvas{border:2px solid #22d3ee;border-radius:10px;box-shadow:0 0 28px rgba(34,211,238,.45);max-width:94vw;max-height:76vh;touch-action:none}
+  #msg{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(7,7,18,.82);text-align:center;padding:20px}
+  #msg.hide{display:none}
+  h1{margin:0;font-size:clamp(34px,8vw,60px);color:#22d3ee;text-shadow:0 0 22px #22d3ee;letter-spacing:.06em}
+  button{font:800 17px system-ui,sans-serif;letter-spacing:.1em;padding:12px 32px;border:0;border-radius:10px;background:#f472b6;color:#2a0a1a;box-shadow:0 5px 0 #a3305f;cursor:pointer}
+  #hint{font-size:12px;opacity:.65}
+</style>
+</head>
+<body>
+<div id="bar">SCORE <span id="sc">0</span> &nbsp; BEST <span id="bs">0</span></div>
+<canvas id="c" width="420" height="420"></canvas>
+<div id="hint">Arrow keys / WASD, or swipe</div>
+<div id="msg"><h1 id="t">NEON SNAKE</h1><div id="s">Eat the glowing dots. Don't hit the walls or yourself.</div><button id="go">PLAY</button></div>
+<script>
+(function(){
+  var N=21, S=20, c=document.getElementById('c'), x=c.getContext('2d');
+  var snake,dir,next,food,score,best=0,alive=false,timer=0,speed=130;
+  try{best=+localStorage.getItem('neon-snake-best')||0}catch(e){}
+  document.getElementById('bs').textContent=best;
+  function rnd(){return Math.floor(Math.random()*N)}
+  function spawn(){do{food={x:rnd(),y:rnd()}}while(snake.some(function(p){return p.x===food.x&&p.y===food.y}))}
+  function start(){
+    snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];dir={x:1,y:0};next=dir;score=0;speed=130;alive=true;
+    document.getElementById('sc').textContent=0;document.getElementById('msg').classList.add('hide');spawn();
+    clearInterval(timer);timer=setInterval(step,speed);
+  }
+  function over(){
+    alive=false;clearInterval(timer);
+    if(score>best){best=score;document.getElementById('bs').textContent=best;try{localStorage.setItem('neon-snake-best',best)}catch(e){}}
+    document.getElementById('t').textContent='GAME OVER';document.getElementById('s').textContent='Score '+score;
+    document.getElementById('go').textContent='PLAY AGAIN';document.getElementById('msg').classList.remove('hide');
+  }
+  function step(){
+    dir=next;var h={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
+    if(h.x<0||h.y<0||h.x>=N||h.y>=N||snake.some(function(p){return p.x===h.x&&p.y===h.y}))return over();
+    snake.unshift(h);
+    if(h.x===food.x&&h.y===food.y){score++;document.getElementById('sc').textContent=score;spawn();
+      if(speed>60){speed-=4;clearInterval(timer);timer=setInterval(step,speed)}}
+    else snake.pop();
+    draw();
+  }
+  function draw(){
+    x.fillStyle='#070712';x.fillRect(0,0,420,420);
+    x.strokeStyle='rgba(34,211,238,.08)';for(var i=0;i<=N;i++){x.beginPath();x.moveTo(i*S,0);x.lineTo(i*S,420);x.moveTo(0,i*S);x.lineTo(420,i*S);x.stroke()}
+    x.shadowBlur=14;x.shadowColor='#f472b6';x.fillStyle='#f472b6';x.beginPath();x.arc(food.x*S+10,food.y*S+10,6,0,7);x.fill();
+    x.shadowColor='#22d3ee';snake.forEach(function(p,i){x.fillStyle=i?'#22d3ee':'#e8f9ff';x.fillRect(p.x*S+2,p.y*S+2,S-4,S-4)});x.shadowBlur=0;
+  }
+  function turn(dx,dy){if(!alive)return;if(dx===-dir.x&&dy===-dir.y)return;next={x:dx,y:dy}}
+  addEventListener('keydown',function(e){
+    var m={ArrowUp:[0,-1],KeyW:[0,-1],ArrowDown:[0,1],KeyS:[0,1],ArrowLeft:[-1,0],KeyA:[-1,0],ArrowRight:[1,0],KeyD:[1,0]}[e.code];
+    if(m){turn(m[0],m[1]);e.preventDefault()}
+    else if((e.code==='Enter'||e.code==='Space')&&!alive)start();
+  });
+  var sx=0,sy=0;
+  addEventListener('pointerdown',function(e){sx=e.clientX;sy=e.clientY});
+  addEventListener('pointerup',function(e){
+    var dx=e.clientX-sx,dy=e.clientY-sy;if(Math.max(Math.abs(dx),Math.abs(dy))<24)return;
+    if(Math.abs(dx)>Math.abs(dy))turn(dx>0?1:-1,0);else turn(0,dy>0?1:-1);
+  });
+  document.getElementById('go').addEventListener('click',start);
+  snake=[{x:10,y:10}];food={x:5,y:5};draw();
+  window.__snake={get alive(){return alive},get score(){return score},get snake(){return snake},get food(){return food},turn:turn};
+})();
+</script>
+</body>
+</html>
