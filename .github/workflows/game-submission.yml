@@ -23,7 +23,6 @@ jobs:
       ISSUE_NUMBER: ${{ github.event.issue.number }}
       ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
       ISSUE_BODY: ${{ github.event.issue.body }}
-      RESULT_FILE: ${{ runner.temp }}/result.json
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,6 +34,7 @@ jobs:
       - name: Label the issue and apply per-author limit
         id: gate
         run: |
+          echo "RESULT_FILE=$RUNNER_TEMP/result.json" >> "$GITHUB_ENV"
           gh label create game-submission --color 5319e7 --description "Game submitted through the form" 2>/dev/null || true
           gh issue edit "$ISSUE_NUMBER" --add-label game-submission
           open=$(gh issue list --author "$ISSUE_AUTHOR" --label game-submission --state open --json number --jq length)
