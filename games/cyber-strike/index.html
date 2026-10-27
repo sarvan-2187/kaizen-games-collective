@@ -157,6 +157,16 @@
             #menu-badge { display: none; }
             #primary-btn { padding-top: 10px !important; padding-bottom: 10px !important; }
         }
+        /* short phone screens (landscape): shrink the HUD so the game stays visible */
+        @media (max-height: 420px) {
+            body.is-touch #hud { zoom: .62; padding: 6px 10px !important; }
+            body.is-touch #hud > div:last-child { transform: none; padding-right: 300px; }
+            #t-pause { right: auto; left: 50%; margin-left: -18px; top: calc(66px + env(safe-area-inset-top)); width: 36px; height: 36px; font-size: 12px; }
+            #t-fire { width: 76px; height: 76px; right: calc(14px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
+            #t-jump { width: 54px; height: 54px; right: calc(100px + env(safe-area-inset-right)); bottom: calc(18px + env(safe-area-inset-bottom)); }
+            #t-sprint { width: 50px; height: 50px; right: calc(22px + env(safe-area-inset-right)); bottom: calc(100px + env(safe-area-inset-bottom)); }
+            #t-reload { width: 44px; height: 44px; right: calc(88px + env(safe-area-inset-right)); bottom: calc(84px + env(safe-area-inset-bottom)); }
+        }
         @media (orientation: portrait) {
             body.is-touch #rotate-hint { display: flex; position: fixed; inset: 0; z-index: 60; background: #050811; color: #00f3ff;
                 align-items: center; justify-content: center; flex-direction: column; gap: 12px; text-align: center;

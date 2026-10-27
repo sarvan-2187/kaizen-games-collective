@@ -133,6 +133,29 @@
         body.is-touch .touch-hint { display: block !important; }
         body.is-touch .kb-hint { display: none !important; }
         #touch-ui.on ~ #kz-bar { display: none !important; }
+        @media (max-height: 420px) {
+            body.is-touch #hud > div:first-child { zoom: .58; }
+            body.is-touch #hud > div:last-child { zoom: .62; }
+            body.is-touch #center-toast-title { font-size: 1.8rem !important; }
+            body.is-touch #center-toast-sub { font-size: 1rem !important; }
+            #t-jump { width: 66px; height: 66px; font-size: 13px; right: calc(12px + env(safe-area-inset-right)); bottom: calc(12px + env(safe-area-inset-bottom)); }
+            #t-nade { width: 50px; height: 50px; font-size: 19px; right: calc(88px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
+            #t-reload { width: 44px; height: 44px; font-size: 11px; right: calc(16px + env(safe-area-inset-right)); bottom: calc(86px + env(safe-area-inset-bottom)); }
+            #t-weapon { width: 44px; height: 44px; font-size: 11px; right: calc(82px + env(safe-area-inset-right)); bottom: calc(78px + env(safe-area-inset-bottom)); }
+        }
+        /* touch layout with a dedicated SHOOT button */
+        #t-fire { right: calc(14px + env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom)); width: 88px; height: 88px; font-size: 15px; background: rgba(254,205,211,.95); }
+        #t-jump { right: calc(112px + env(safe-area-inset-right)); bottom: calc(22px + env(safe-area-inset-bottom)); width: 70px; height: 70px; font-size: 14px; }
+        #t-nade { right: calc(24px + env(safe-area-inset-right)); bottom: calc(116px + env(safe-area-inset-bottom)); width: 54px; height: 54px; font-size: 20px; }
+        #t-reload { right: calc(100px + env(safe-area-inset-right)); bottom: calc(102px + env(safe-area-inset-bottom)); width: 48px; height: 48px; font-size: 12px; }
+        #t-weapon { right: calc(160px + env(safe-area-inset-right)); bottom: calc(98px + env(safe-area-inset-bottom)); width: 48px; height: 48px; font-size: 12px; }
+        @media (max-height: 420px) {
+            #t-fire { width: 72px; height: 72px; right: calc(10px + env(safe-area-inset-right)); bottom: calc(10px + env(safe-area-inset-bottom)); font-size: 13px; }
+            #t-jump { width: 58px; height: 58px; right: calc(92px + env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
+            #t-nade { width: 44px; height: 44px; font-size: 17px; right: calc(18px + env(safe-area-inset-right)); bottom: calc(92px + env(safe-area-inset-bottom)); }
+            #t-reload { width: 40px; height: 40px; font-size: 10px; right: calc(84px + env(safe-area-inset-right)); bottom: calc(80px + env(safe-area-inset-bottom)); }
+            #t-weapon { width: 40px; height: 40px; font-size: 10px; right: calc(132px + env(safe-area-inset-right)); bottom: calc(76px + env(safe-area-inset-bottom)); }
+        }
         @media (max-height: 480px) {
             #modal-overlay { padding: 8px !important; }
             #modal-overlay > .sketch-box { padding: 12px 16px !important; }
@@ -154,6 +177,7 @@
     <div id="rotate-hint"><div style="font-size:46px">&#8635;</div>ROTATE YOUR PHONE<div style="font:400 16px 'Patrick Hand',sans-serif">Stickman Warfare plays in landscape</div></div>
     <div id="touch-ui">
         <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+        <div id="t-fire" class="tbtn">SHOOT</div>
         <div id="t-weapon" class="tbtn">GUN<br>&#8635;</div>
         <div id="t-reload" class="tbtn">RLD</div>
         <div id="t-nade" class="tbtn">&#128163;</div>
@@ -177,7 +201,7 @@
                         <div id="hud-hp-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-150" style="width: 100%;"></div>
                     </div>
                     <div id="hud-regen-tag" class="text-[11px] text-emerald-700 font-bold leading-none mt-1">
-                        ✓ Auto-Healing Active + Laser Sight
+                        ✓ Auto-Healing Active
                     </div>
                 </div>
 
@@ -342,7 +366,7 @@
                             </div>
                             <div class="p-2.5 border-2 border-slate-800 rounded-lg bg-white">
                                 <div class="font-marker text-base">4. AR Rifle</div>
-                                <div class="text-slate-600">Heavy Auto + Laser</div>
+                                <div class="text-slate-600">Heavy Auto Fire</div>
                                 <div class="text-emerald-700 font-bold mt-1">✓ Ready Lvl 1</div>
                             </div>
                             <div class="p-2.5 border-2 border-slate-800 rounded-lg bg-white">
@@ -370,7 +394,7 @@
                         </div>
                         <div class="p-3 border-2 border-slate-800 rounded-lg bg-amber-50">
                             <div class="font-marker text-slate-900">LEFT CLICK (HOLD)</div>
-                            <div class="text-slate-700 font-bold">Aim Laser & Fire Gun</div>
+                            <div class="text-slate-700 font-bold">Aim & Fire Gun</div>
                         </div>
                         <div class="p-3 border-2 border-slate-800 rounded-lg bg-amber-50">
                             <div class="font-marker text-slate-900">G or RIGHT CLICK</div>
@@ -379,7 +403,7 @@
                     </div>
 
                     <div class="touch-hint hidden p-3 border-2 border-slate-800 rounded-lg bg-amber-50 text-xs sm:text-sm font-bold text-slate-700">
-                        <span class="font-marker">TOUCH:</span> left thumb = run &middot; touch &amp; hold anywhere to aim + fire &middot; JUMP / &#128163; / RLD / GUN buttons.
+                        <span class="font-marker">TOUCH:</span> left thumb = run &middot; hold SHOOT to fire (auto-aims at the nearest enemy) &middot; or touch &amp; hold anywhere to aim yourself &middot; JUMP / &#128163; / RLD / GUN buttons.
                     </div>
                     <!-- Main Action Buttons -->
                     <div class="flex flex-wrap items-center gap-3 pt-2">
@@ -428,7 +452,7 @@
          *   fluttering red bandana, 360-degree aiming arms, and ragdoll physics
          * - Full 6-Weapon Arsenal:
          *     1. Pistol, 2. SMG, 3. Shotgun, 4. AR Rifle, 5. Bazooka, 6. Grenades
-         * - Forgiving, fun gameplay: Laser sight, auto health regen, double jump,
+         * - Forgiving, fun gameplay: Auto health regen, double jump,
          *   dodgeable enemy projectiles, medkit/ammo crates, & instant Sandbox toggle
          * - 30 Distinct Levels with Bosses every 5 levels & persistent upgrades
          * ============================================================================
@@ -727,6 +751,7 @@
         let groundY = H - 76;
 
         const keys = { left: false, right: false, up: false, down: false };
+        let touchFire = false, lastManualAim = 0;
         const IS_TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window;
         if (IS_TOUCH) document.body.classList.add('is-touch');
         const mouse = { x: W / 2, y: H / 2, down: false };
@@ -1406,7 +1431,18 @@
                 }
             }
 
-            if (mouse.down && gameState === 'PLAYING' && player.hp > 0) {
+            if (touchFire && gameState === 'PLAYING' && player.hp > 0 && performance.now() - lastManualAim > 1000) {
+                // auto-aim: nearest living enemy, else straight ahead
+                let best = null, bestD = Infinity;
+                for (const en of enemies) {
+                    if (en.hp <= 0) continue;
+                    const d = Math.hypot(en.x - player.x, en.y - player.y);
+                    if (d < bestD) { bestD = d; best = en; }
+                }
+                if (best) { mouse.x = best.x; mouse.y = best.y - 38 * (best.scale || 1); }
+                else { mouse.x = player.x + (player.facing || 1) * 300; mouse.y = player.y - 38; }
+            }
+            if ((mouse.down || touchFire) && gameState === 'PLAYING' && player.hp > 0) {
                 fireCurrentWeapon(now);
             }
 
@@ -1986,20 +2022,6 @@
             const shoulderX = neckX;
             const shoulderY = neckY + 4 * scale;
 
-            // Helpful Dotted Laser Sight for Player (follows actual clamped firing trajectory)
-            if (isPlayer) {
-                ctx.save();
-                ctx.strokeStyle = 'rgba(225, 29, 72, 0.35)';
-                ctx.lineWidth = 1.6;
-                ctx.setLineDash([6, 6]);
-                const laserDist = Math.max(120, Math.hypot(mouse.x - shoulderX, mouse.y - shoulderY));
-                ctx.beginPath();
-                ctx.moveTo(shoulderX + Math.cos(aimAngle) * 28, shoulderY + Math.sin(aimAngle) * 28);
-                ctx.lineTo(shoulderX + Math.cos(aimAngle) * laserDist, shoulderY + Math.sin(aimAngle) * laserDist);
-                ctx.stroke();
-                ctx.restore();
-            }
-
             ctx.save();
             ctx.translate(shoulderX, shoulderY);
             ctx.rotate(aimAngle);
@@ -2440,9 +2462,9 @@
             canvas.addEventListener('pointerdown', (e) => {
                 if (e.pointerType !== 'touch' || aimId !== null || gameState !== 'PLAYING' || player.hp <= 0) return;
                 audio.init(); aimId = e.pointerId; canvas.setPointerCapture(aimId);
-                mouse.x = e.clientX; mouse.y = e.clientY; mouse.down = true;
+                mouse.x = e.clientX; mouse.y = e.clientY; mouse.down = true; lastManualAim = performance.now();
             });
-            canvas.addEventListener('pointermove', (e) => { if (e.pointerId === aimId) { mouse.x = e.clientX; mouse.y = e.clientY; } });
+            canvas.addEventListener('pointermove', (e) => { if (e.pointerId === aimId) { mouse.x = e.clientX; mouse.y = e.clientY; lastManualAim = performance.now(); } });
             ['pointerup', 'pointercancel'].forEach(t => canvas.addEventListener(t, (e) => { if (e.pointerId === aimId) { aimId = null; mouse.down = false; } }));
 
             function press(id, fn) {
@@ -2452,6 +2474,12 @@
                 });
                 ['pointerup', 'pointercancel'].forEach(t => el.addEventListener(t, () => el.classList.remove('down')));
             }
+            // SHOOT: hold to fire. Aims at the nearest enemy unless you touched the screen to aim in the last second.
+            const fireBtn = document.getElementById('t-fire');
+            fireBtn.addEventListener('pointerdown', (e) => {
+                e.preventDefault(); fireBtn.setPointerCapture(e.pointerId); fireBtn.classList.add('down'); audio.init(); touchFire = true;
+            });
+            ['pointerup', 'pointercancel'].forEach(t => fireBtn.addEventListener(t, () => { fireBtn.classList.remove('down'); touchFire = false; }));
             press('t-jump', doJump);
             press('t-nade', () => { if (gameState === 'PLAYING' && player.hp > 0) throwGrenade(performance.now() / 1000); });
             press('t-reload', () => { if (gameState === 'PLAYING' && player.hp > 0) startReload(); });
