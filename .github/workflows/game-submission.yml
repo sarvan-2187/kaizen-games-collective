@@ -96,9 +96,10 @@ jobs:
           } > "$RUNNER_TEMP/pr.md"
 
           gh label create game-submission --color 5319e7 2>/dev/null || true
+          gh label create game --color 1d76db --description "A game was added or changed" 2>/dev/null || true
           existing=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
           if [ -z "$existing" ]; then
-            if pr=$(gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "Add game: $name" --body-file "$RUNNER_TEMP/pr.md" --label game-submission); then
+            if pr=$(gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "Add game: $name" --body-file "$RUNNER_TEMP/pr.md" --label game-submission --label game); then
               gh issue comment "$ISSUE_NUMBER" --body "All checks passed. I opened $pr for a maintainer to review. You will be notified there. If you need to change something, edit this issue and I will update the pull request."
             else
               gh issue comment "$ISSUE_NUMBER" --body "Your game passed the checks, but I could not open the pull request automatically. A maintainer has been notified."
