@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/banner.png" alt="Kaizen Games Collective 改善: free open-source browser games for desktop and phones" width="100%">
+</p>
+
 # Kaizen Games Collective 改善
 
 Free browser games, built in the open. Every game is a plain HTML page, runs on desktop and phones, and is made by a named contributor.
@@ -36,6 +40,7 @@ Every game page has a **Report a bug** button and every game card on the home pa
 
 ```
 index.html                 Home page (reads games.json at runtime)
+assets/fonts/              Mona Sans (SIL Open Font License)
 games/<slug>/index.html    One folder per game
 games/<slug>/game.json     Name, authors, license, controls, etc.
 templates/game-template/   Starter to copy for new games

@@ -20,6 +20,7 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 fs.copyFileSync(path.join(ROOT, 'index.html'), path.join(OUT, 'index.html'));
 fs.cpSync(GAMES_DIR, path.join(OUT, 'games'), { recursive: true });
+if (fs.existsSync(path.join(ROOT, 'assets'))) fs.cpSync(path.join(ROOT, 'assets'), path.join(OUT, 'assets'), { recursive: true });
 fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
 
 const registry = {
