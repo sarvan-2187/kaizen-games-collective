@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>My Game</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#111;color:#fff;font-family:system-ui,sans-serif;touch-action:none}
+  canvas{display:block;width:100%;height:100%}
+</style>
+</head>
+<body>
+<canvas id="game"></canvas>
+<script>
+// Starter: a dot you move with arrow keys / WASD or by touching the screen.
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+const player = { x: 100, y: 100 };
+const keys = {};
+let target = null;
+
+function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+addEventListener('resize', resize); resize();
+
+addEventListener('keydown', e => keys[e.code] = true);
+addEventListener('keyup', e => keys[e.code] = false);
+canvas.addEventListener('pointerdown', e => target = { x: e.clientX, y: e.clientY });
+canvas.addEventListener('pointermove', e => { if (target) target = { x: e.clientX, y: e.clientY }; });
+addEventListener('pointerup', () => target = null);
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  const speed = 300;
+  if (keys.ArrowLeft || keys.KeyA) player.x -= speed * dt;
+  if (keys.ArrowRight || keys.KeyD) player.x += speed * dt;
+  if (keys.ArrowUp || keys.KeyW) player.y -= speed * dt;
+  if (keys.ArrowDown || keys.KeyS) player.y += speed * dt;
+  if (target) {
+    const dx = target.x - player.x, dy = target.y - player.y, d = Math.hypot(dx, dy) || 1;
+    player.x += dx / d * Math.min(d, speed * dt); player.y += dy / d * Math.min(d, speed * dt);
+  }
+  ctx.fillStyle = '#111'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = '#f472b6'; ctx.beginPath(); ctx.arc(player.x, player.y, 18, 0, 7); ctx.fill();
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+name: Bug report
+description: Something is broken in a game or on the Kaizen Games site
+title: "[game-slug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make the games better! The game's author is notified from this report.
+  - type: input
+    id: game
+    attributes:
+      label: Game
+      description: The game's folder name, for example `cyber-strike`. Use `site` for the home page.
+      placeholder: cyber-strike
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Start the game
+        2. Press ...
+        3. See the problem
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - Desktop or laptop
+        - Phone
+        - Tablet
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 130 on Android 14
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots, video or console errors
+      description: Drag files in here. On desktop, press F12 and copy any red errors from the Console tab.

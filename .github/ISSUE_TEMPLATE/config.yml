@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/sarvan-2187/kaizen-games-collective/security/advisories/new
+    about: Please report security problems privately, not as a public issue.
+  - name: Want to add your game?
+    url: https://github.com/sarvan-2187/kaizen-games-collective/blob/main/CONTRIBUTING.md
+    about: Read the submission guide, then open a pull request.

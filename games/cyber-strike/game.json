@@ -1,0 +1,13 @@
+{
+  "slug": "cyber-strike",
+  "name": "Cyber Strike",
+  "jpTitle": "電脳打撃",
+  "description": "Hold a neon arena against waves of hostile drones with a pulse carbine. Tap Shift once to sprint.",
+  "authors": [{ "name": "sarvan-2187", "github": "sarvan-2187" }],
+  "license": "MIT",
+  "version": "1.1.0",
+  "genre": "3D arena FPS",
+  "tags": ["fps", "3d", "arena", "waves"],
+  "controls": ["keyboard", "mouse", "touch"],
+  "accent": "#22d3ee"
+}

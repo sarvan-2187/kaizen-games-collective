@@ -1,0 +1,5 @@
+# Every change needs a maintainer review. Add game authors per folder so they are asked to review changes to their own game:
+# /games/neon-snake/ @ada
+*                          @sarvan-2187
+/games/cyber-strike/       @sarvan-2187
+/games/stickman-warfare/   @sarvan-2187

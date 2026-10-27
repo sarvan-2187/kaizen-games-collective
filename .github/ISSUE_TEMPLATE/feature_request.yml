@@ -1,0 +1,21 @@
+name: Idea or feature request
+description: Suggest an improvement to a game or to the platform
+labels: ["enhancement"]
+body:
+  - type: input
+    id: game
+    attributes:
+      label: Game or area
+      description: A game's folder name, or `site` for the home page / platform.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to see?
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it help?

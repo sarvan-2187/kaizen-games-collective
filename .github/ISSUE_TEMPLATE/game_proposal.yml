@@ -1,0 +1,36 @@
+name: Game proposal
+description: Pitch a game before you build it, or ask if your idea fits
+labels: ["game-proposal"]
+title: "[proposal] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        You don't need to open a proposal; you can send a pull request straight away (see CONTRIBUTING.md). Use this if you want feedback first.
+  - type: input
+    id: name
+    attributes:
+      label: Game name
+    validations:
+      required: true
+  - type: textarea
+    id: pitch
+    attributes:
+      label: Pitch
+      description: What is it, and how does it play?
+    validations:
+      required: true
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Planned controls
+      options:
+        - label: Keyboard
+        - label: Mouse
+        - label: Touch (phones)
+        - label: Gamepad
+  - type: input
+    id: license
+    attributes:
+      label: Planned license
+      placeholder: MIT

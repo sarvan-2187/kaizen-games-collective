@@ -1,0 +1,13 @@
+{
+  "slug": "my-game",
+  "name": "My Game",
+  "description": "One or two sentences about your game that make people want to play it.",
+  "authors": [{ "name": "Your Name", "github": "your-github-username" }],
+  "license": "MIT",
+  "version": "1.0.0",
+  "genre": "Arcade",
+  "tags": ["arcade", "casual"],
+  "controls": ["keyboard", "touch"],
+  "accent": "#f472b6",
+  "jpTitle": "遊"
+}

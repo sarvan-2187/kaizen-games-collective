@@ -1,0 +1,13 @@
+{
+  "slug": "stickman-warfare",
+  "name": "Stickman Warfare",
+  "jpTitle": "棒人間戦記",
+  "description": "Hand-drawn notebook battles with six weapons, ragdolls, upgrades and 30 campaign levels.",
+  "authors": [{ "name": "sarvan-2187", "github": "sarvan-2187" }],
+  "license": "MIT",
+  "version": "1.1.0",
+  "genre": "2D shooter",
+  "tags": ["shooter", "2d", "campaign", "ragdoll"],
+  "controls": ["keyboard", "mouse", "touch"],
+  "accent": "#60a5fa"
+}

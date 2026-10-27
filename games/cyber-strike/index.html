@@ -148,8 +148,7 @@
         body.is-touch #hud > div:last-child > :first-child { opacity: .9; }
         body.is-touch #menu-overlay { overflow-y: auto; align-items: flex-start; }
         body.is-touch #menu-overlay > div { margin: auto; }
-        #touch-ui.on ~ a[href="../../index.html"] { display: none; }
-        body.is-touch a[href="../../index.html"] { top: 8px !important; bottom: auto !important; left: 8px !important; transform: none !important; }
+        #touch-ui.on ~ #kz-bar { display: none !important; }
         @media (max-height: 480px) {
             #menu-overlay > div { padding: 12px 20px !important; }
             #menu-overlay .mb-6 { margin-bottom: 10px !important; }
@@ -1961,6 +1960,5 @@
             gameLoop();
         };
     </script>
-<a href="../../index.html" style="position:fixed;bottom:8px;left:50%;transform:translateX(-50%);z-index:60;font:600 11px system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;text-decoration:none;opacity:.55" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.55">&larr; Kaizen Games</a>
 </body>
 </html>

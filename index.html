@@ -66,23 +66,48 @@ nav a.link:hover{color:var(--paper)}
 
 /* game cards */
 .games{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));padding-bottom:70px}
-.card{position:relative;display:grid;grid-template-columns:72px 1fr;text-decoration:none;
+.card{position:relative;display:grid;grid-template-columns:72px 1fr;
   background:linear-gradient(160deg,rgba(243,234,216,.07),rgba(243,234,216,.02));
   border:1px solid var(--line);border-radius:4px;overflow:hidden;backdrop-filter:blur(4px);
   transition:transform .25s,border-color .25s,box-shadow .25s}
-.card:hover,.card:focus-visible{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 1px var(--gold)}
-.card .tate{display:flex;align-items:center;justify-content:center;background:var(--red-deep);color:var(--paper);
+.card:hover,.card:focus-within{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 1px var(--gold)}
+.card .tate{display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--a,#a31a2c) 48%,#000);color:var(--paper);
   font:800 1.55rem/1.15 var(--serif);letter-spacing:.2em;writing-mode:vertical-rl;text-orientation:upright;padding:20px 0;
   border-right:3px double rgba(243,234,216,.5)}
-.card.alt .tate{background:#1f3a5f}
-.card .info{padding:24px 26px 26px;display:flex;flex-direction:column;gap:6px}
+.card .info{padding:24px 26px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .card .tag{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
 .card h2{margin:0;font:800 1.9rem/1.15 var(--serif)}
+.card h2 a{text-decoration:none}
+.card h2 a::after{content:"";position:absolute;inset:0;z-index:1}
 .card p{margin:4px 0 0;color:var(--paper-dim);font-size:.97rem}
-.card .keys{margin-top:10px;font-size:.8rem;color:var(--paper-dim);letter-spacing:.04em;border-top:1px dashed var(--line);padding-top:12px}
-.card .go{margin-top:14px;font:700 .85rem var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--paper)}
+.card .by{margin-top:6px;font-size:.85rem;color:var(--paper-dim)}
+.card .by a{color:var(--paper);position:relative;z-index:2}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:.72rem;letter-spacing:.08em;padding:2px 9px;border:1px solid var(--line);border-radius:999px;color:var(--paper-dim)}
+.chip.ok{border-color:var(--gold);color:var(--gold)}
+.card .foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+.card .go{font:700 .85rem var(--sans);letter-spacing:.24em;text-transform:uppercase}
 .card .go::after{content:" →";display:inline-block;transition:transform .2s}
 .card:hover .go::after{transform:translateX(6px)}
+.card .bug{position:relative;z-index:2;font-size:.78rem;color:var(--paper-dim);letter-spacing:.06em}
+.card .bug:hover{color:var(--paper)}
+.card.add{border-style:dashed;grid-template-columns:1fr;text-align:center}
+.card.add .info{align-items:center;justify-content:center;padding:34px 26px}
+.msg{grid-column:1/-1;color:var(--paper-dim);padding:20px;border:1px dashed var(--line);border-radius:4px}
+
+/* makers + open source */
+.makers{display:flex;flex-wrap:wrap;gap:14px;padding-bottom:50px}
+.maker{display:flex;align-items:center;gap:12px;padding:10px 16px 10px 10px;border:1px solid var(--line);border-radius:999px;text-decoration:none;background:rgba(243,234,216,.04);transition:border-color .2s}
+.maker:hover,.maker:focus-visible{border-color:var(--gold)}
+.maker img{width:40px;height:40px;border-radius:50%;background:var(--ink2)}
+.maker b{display:block;font-weight:700;line-height:1.2}
+.maker small{color:var(--paper-dim)}
+.oss{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px;padding-bottom:56px}
+.oss a{display:block;padding:20px;border:1px solid var(--line);border-radius:4px;text-decoration:none;background:rgba(243,234,216,.03);transition:border-color .2s,transform .2s}
+.oss a:hover,.oss a:focus-visible{border-color:var(--gold);transform:translateY(-3px)}
+.oss b{display:block;font:700 1.1rem var(--serif);margin-bottom:4px}
+.oss span{color:var(--paper-dim);font-size:.93rem}
+footer a{color:var(--paper)}
 
 /* philosophy */
 .kaizen{display:grid;grid-template-columns:auto 1fr;gap:30px;align-items:center;padding:34px 0 60px;border-top:1px solid var(--line)}
@@ -96,7 +121,7 @@ footer b{color:var(--red);font-weight:700}
 @media (max-width:520px){
   .card{grid-template-columns:54px 1fr}
   .card .tate{font-size:1.15rem}
-  .card .info{padding:18px}
+  .card .info{padding:18px 18px 14px}
   .card h2{font-size:1.5rem}
   .kaizen{grid-template-columns:1fr}
   .kaizen .big{writing-mode:horizontal-tb;font-size:2.6rem}
@@ -128,27 +153,19 @@ footer b{color:var(--red);font-weight:700}
 
 <main id="games">
   <div class="sec"><span lang="ja">遊戯</span><i></i><em>GAMES</em></div>
-  <div class="games">
-    <a class="card" href="games/cyber-strike/">
-      <div class="tate" lang="ja" aria-hidden="true">電脳打撃</div>
-      <div class="info">
-        <span class="tag">3D arena FPS · Desktop</span>
-        <h2>Cyber Strike</h2>
-        <p>Hold the neon arena against waves of hostile drones with your pulse carbine. Tap Shift once and sprint for as long as you like.</p>
-        <div class="keys">WASD move · Mouse aim · Space jump · Shift sprint · R reload</div>
-        <span class="go">Play now</span>
-      </div>
-    </a>
-    <a class="card alt" href="games/stickman-warfare/">
-      <div class="tate" lang="ja" aria-hidden="true">棒人間戦記</div>
-      <div class="info">
-        <span class="tag">2D shooter · 30 levels · Desktop</span>
-        <h2>Stickman Warfare</h2>
-        <p>Hand-drawn notebook battles with six weapons, ragdolls, upgrades and 30 campaign pages to clear.</p>
-        <div class="keys">A/D move · W/Space jump · Click fire · G grenade</div>
-        <span class="go">Play now</span>
-      </div>
-    </a>
+  <div class="games" id="game-grid" aria-live="polite">
+    <p class="msg">Loading games…</p>
+  </div>
+  <noscript><p class="msg">The game list needs JavaScript. You can also browse the <a href="https://github.com/sarvan-2187/kaizen-games-collective/tree/main/games">games folder on GitHub</a>.</p></noscript>
+
+  <div class="sec" id="makers-sec" hidden><span lang="ja">匠</span><i></i><em>MAKERS</em></div>
+  <div class="makers" id="makers"></div>
+
+  <div class="sec"><span lang="ja">参加</span><i></i><em>JOIN IN</em></div>
+  <div class="oss" id="oss">
+    <a id="lnk-submit" href="#"><b>Submit your game</b><span>Built a game in a single HTML file? Add it to the collective with a pull request.</span></a>
+    <a id="lnk-bug" href="#"><b>Report a bug</b><span>Found something broken in a game? Tell us and the maker will see it.</span></a>
+    <a id="lnk-repo" href="#"><b>View the source</b><span>Everything here is open source. Read it, fork it, improve it.</span></a>
   </div>
 
   <section class="kaizen">
@@ -161,8 +178,71 @@ footer b{color:var(--red);font-weight:700}
 </main>
 </div>
 
-<footer>© Kaizen Games Collective · <b lang="ja">改善</b> · Best on a keyboard and mouse</footer>
+<footer>© Kaizen Games Collective · <b lang="ja">改善</b> · Open source · <a href="https://github.com/sarvan-2187/kaizen-games-collective">GitHub</a></footer>
 
+<script>
+(function(){
+  var DEFAULT_REPO='sarvan-2187/kaizen-games-collective';
+  var SLUG=/^[a-z0-9]+(?:-[a-z0-9]+)*$/, GH=/^[A-Za-z0-9][A-Za-z0-9-]{0,38}$/, HEX=/^#[0-9a-fA-F]{6}$/;
+  var grid=document.getElementById('game-grid');
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function setRepoLinks(repo){
+    var base='https://github.com/'+repo;
+    document.getElementById('lnk-submit').href=base+'/blob/main/CONTRIBUTING.md';
+    document.getElementById('lnk-bug').href=base+'/issues/new?template=bug_report.yml';
+    document.getElementById('lnk-repo').href=base;
+  }
+  setRepoLinks(DEFAULT_REPO);
+  function card(g,repo){
+    var c=el('article','card');
+    if(g.accent&&HEX.test(g.accent))c.style.setProperty('--a',g.accent);
+    var tate=el('div','tate',g.jpTitle||'遊');tate.setAttribute('lang','ja');tate.setAttribute('aria-hidden','true');
+    var info=el('div','info');
+    info.appendChild(el('span','tag',[g.genre,g.controls&&g.controls.indexOf('touch')>-1?'Mobile ready':'Desktop'].filter(Boolean).join(' · ')));
+    var h=el('h2');var a=el('a',null,g.name);a.href='games/'+g.slug+'/';h.appendChild(a);info.appendChild(h);
+    info.appendChild(el('p',null,g.description));
+    var by=el('div','by','By ');
+    g.authors.forEach(function(au,i){
+      if(i)by.appendChild(document.createTextNode(', '));
+      if(GH.test(au.github)){var l=el('a',null,au.name);l.href='https://github.com/'+au.github;l.rel='noopener';by.appendChild(l)}
+      else by.appendChild(document.createTextNode(au.name));
+    });
+    info.appendChild(by);
+    var chips=el('div','chips');
+    (g.tags||[]).slice(0,4).forEach(function(t){chips.appendChild(el('span','chip',t))});
+    chips.appendChild(el('span','chip ok',g.license));
+    info.appendChild(chips);
+    var foot=el('div','foot');foot.appendChild(el('span','go','Play now'));
+    var bug=el('a','bug','Report a bug');
+    bug.href='https://github.com/'+repo+'/issues/new?template=bug_report.yml&game='+encodeURIComponent(g.slug)+'&title='+encodeURIComponent('['+g.slug+'] ');
+    bug.target='_blank';bug.rel='noopener';foot.appendChild(bug);info.appendChild(foot);
+    c.appendChild(tate);c.appendChild(info);return c;
+  }
+  fetch('games.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(reg){
+    var repo=/^[\w.-]+\/[\w.-]+$/.test(reg.repo||'')?reg.repo:DEFAULT_REPO;
+    setRepoLinks(repo);
+    var games=(reg.games||[]).filter(function(g){return SLUG.test(g.slug)&&Array.isArray(g.authors)&&g.authors.length});
+    grid.textContent='';
+    games.forEach(function(g){grid.appendChild(card(g,repo))});
+    var add=el('article','card add');var info=el('div','info');
+    info.appendChild(el('span','tag','Open source'));
+    var h=el('h2');var al=el('a',null,'Your game here');al.href='https://github.com/'+repo+'/blob/main/CONTRIBUTING.md';al.rel='noopener';h.appendChild(al);info.appendChild(h);
+    info.appendChild(el('p',null,'One HTML file and a pull request is all it takes.'));add.appendChild(info);grid.appendChild(add);
+    var makers={};
+    games.forEach(function(g){g.authors.forEach(function(au){if(!GH.test(au.github))return;var k=au.github.toLowerCase();(makers[k]=makers[k]||{name:au.name,github:au.github,games:[]}).games.push(g.name)})});
+    var box=document.getElementById('makers'),keys=Object.keys(makers);
+    keys.forEach(function(k){
+      var m=makers[k],a=el('a','maker');a.href='https://github.com/'+m.github;a.rel='noopener';
+      var img=document.createElement('img');img.src='https://github.com/'+m.github+'.png?size=80';img.alt='';img.loading='lazy';img.width=40;img.height=40;a.appendChild(img);
+      var t=el('span');t.appendChild(el('b',null,m.name));t.appendChild(el('small',null,m.games.join(', ')));a.appendChild(t);box.appendChild(a);
+    });
+    if(keys.length)document.getElementById('makers-sec').hidden=false;
+  }).catch(function(){
+    grid.textContent='';
+    grid.appendChild(el('p','msg','Could not load the game list. If you are previewing locally, run "npm run preview" instead of opening the file directly.'));
+  });
+})();
+</script>
 <script>
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
