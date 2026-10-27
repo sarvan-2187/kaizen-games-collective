@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Stickman Warfare // 30 Levels</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Permanent+Marker&family=Patrick+Hand&display=swap" rel="stylesheet">
@@ -103,12 +103,63 @@
             background: #475569;
             border-radius: 4px;
         }
+
+        /* ===== Touch controls (phones / tablets) ===== */
+        html, body { overscroll-behavior: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+        body.is-touch #game-canvas { touch-action: none; }
+        #touch-ui, #rotate-hint { display: none; }
+        body.is-touch #touch-ui.on { display: block; }
+        #touch-ui { position: fixed; inset: 0; z-index: 12; pointer-events: none; }
+        #touch-ui > * { pointer-events: auto; touch-action: none; }
+        #stick-zone { position: absolute; left: 0; bottom: 0; width: 38%; height: 55%; }
+        #stick-base { position: absolute; width: 124px; height: 124px; margin: -62px 0 0 -62px; border-radius: 50%;
+            border: 3px solid #1e293b; background: rgba(254,240,138,.35); display: none; pointer-events: none; }
+        #stick-knob { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%;
+            background: #fef08a; border: 3px solid #1e293b; box-shadow: 2px 3px 0 #1e293b; }
+        .tbtn { position: absolute; display: grid; place-items: center; border-radius: 50%; color: #1e293b;
+            font: 400 13px 'Permanent Marker', cursive; background: rgba(254,240,138,.92); border: 3px solid #1e293b;
+            box-shadow: 3px 4px 0 #1e293b; user-select: none; text-align: center; line-height: 1.05; }
+        .tbtn.down { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #1e293b; background: #fde047; }
+        #t-jump { right: calc(16px + env(safe-area-inset-right)); bottom: calc(18px + env(safe-area-inset-bottom)); width: 78px; height: 78px; font-size: 15px; }
+        #t-nade { right: calc(104px + env(safe-area-inset-right)); bottom: calc(22px + env(safe-area-inset-bottom)); width: 58px; height: 58px; background: rgba(254,205,211,.95); font-size: 22px; }
+        #t-reload { right: calc(22px + env(safe-area-inset-right)); bottom: calc(108px + env(safe-area-inset-bottom)); width: 52px; height: 52px; background: rgba(186,230,253,.95); }
+        #t-weapon { right: calc(96px + env(safe-area-inset-right)); bottom: calc(92px + env(safe-area-inset-bottom)); width: 52px; height: 52px; background: rgba(187,247,208,.95); }
+        body.is-touch #hud { padding: 6px !important; }
+        body.is-touch #weapon-bar, body.is-touch #btn-reload-hud, body.is-touch #hud-regen-tag { display: none !important; }
+        body.is-touch #hud > div:first-child { zoom: .72; }
+        body.is-touch #hud > div:last-child { justify-content: center !important; flex-direction: row !important; zoom: .78; }
+        body.is-touch #hud > div:last-child .sketch-box { padding-top: 4px; padding-bottom: 4px; }
+        body.is-touch #modal-overlay { align-items: flex-start; }
+        body.is-touch .touch-hint { display: block !important; }
+        body.is-touch .kb-hint { display: none !important; }
+        body.is-touch a[href="../../index.html"] { bottom: 8px !important; left: 8px !important; transform: none !important; opacity: .9 !important; }
+        #touch-ui.on ~ a[href="../../index.html"] { display: none; }
+        @media (max-height: 480px) {
+            #modal-overlay { padding: 8px !important; }
+            #modal-overlay > .sketch-box { padding: 12px 16px !important; }
+            #modal-title { font-size: 1.7rem !important; }
+            #modal-subtitle { display: none; }
+        }
+        @media (orientation: portrait) {
+            body.is-touch #rotate-hint { display: flex; position: fixed; inset: 0; z-index: 60; background: #f6f4eb; color: #1e293b;
+                align-items: center; justify-content: center; flex-direction: column; gap: 10px; text-align: center;
+                font: 400 22px 'Permanent Marker', cursive; padding: 24px; }
+        }
     </style>
 </head>
 <body>
 
     <!-- Main 2D Notebook Canvas -->
     <canvas id="game-canvas"></canvas>
+
+    <div id="rotate-hint"><div style="font-size:46px">&#8635;</div>ROTATE YOUR PHONE<div style="font:400 16px 'Patrick Hand',sans-serif">Stickman Warfare plays in landscape</div></div>
+    <div id="touch-ui">
+        <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+        <div id="t-weapon" class="tbtn">GUN<br>&#8635;</div>
+        <div id="t-reload" class="tbtn">RLD</div>
+        <div id="t-nade" class="tbtn">&#128163;</div>
+        <div id="t-jump" class="tbtn">JUMP</div>
+    </div>
 
     <!-- ==================== IN-GAME HUD ==================== -->
     <div id="hud" class="fixed inset-0 pointer-events-none z-10 flex flex-col justify-between p-3 sm:p-5 hidden">
@@ -309,7 +360,7 @@
                     </div>
 
                     <!-- Easy Controls Reference -->
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs sm:text-sm">
+                    <div class="kb-hint grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs sm:text-sm">
                         <div class="p-3 border-2 border-slate-800 rounded-lg bg-amber-50">
                             <div class="font-marker text-slate-900">A / D or ◀ / ▶</div>
                             <div class="text-slate-700 font-bold">Run Left & Right</div>
@@ -328,6 +379,9 @@
                         </div>
                     </div>
 
+                    <div class="touch-hint hidden p-3 border-2 border-slate-800 rounded-lg bg-amber-50 text-xs sm:text-sm font-bold text-slate-700">
+                        <span class="font-marker">TOUCH:</span> left thumb = run &middot; touch &amp; hold anywhere to aim + fire &middot; JUMP / &#128163; / RLD / GUN buttons.
+                    </div>
                     <!-- Main Action Buttons -->
                     <div class="flex flex-wrap items-center gap-3 pt-2">
                         <button id="btn-start-current" class="sketch-btn flex-1 py-3.5 px-6 font-marker text-xl sm:text-2xl text-slate-900">
@@ -674,6 +728,8 @@
         let groundY = H - 76;
 
         const keys = { left: false, right: false, up: false, down: false };
+        const IS_TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window;
+        if (IS_TOUCH) document.body.classList.add('is-touch');
         const mouse = { x: W / 2, y: H / 2, down: false };
 
         let gameState = 'MENU'; // 'MENU', 'PLAYING', 'PAUSED'
@@ -2346,7 +2402,67 @@
             setTimeout(() => { btn.textContent = orig; }, 700);
         }
 
+        function setTouchUI(on) {
+            document.getElementById('touch-ui').classList.toggle('on', on && IS_TOUCH);
+            if (!on) { keys.left = keys.right = keys.down = false; mouse.down = false; }
+        }
+        function doJump() {
+            if (gameState === 'PLAYING' && player.hp > 0 && player.jumpsLeft > 0) {
+                player.vy = -590;
+                player.onGround = false;
+                player.jumpsLeft--;
+                audio.playJump();
+            }
+        }
+        function setupTouchControls() {
+            const zone = document.getElementById('stick-zone');
+            const base = document.getElementById('stick-base');
+            const knob = document.getElementById('stick-knob');
+            let stickId = null, sx = 0, sy = 0, aimId = null;
+            const R = 52, DEAD = 0.3;
+            function applyStick(dx, dy) {
+                const d = Math.hypot(dx, dy) || 1, k = Math.min(1, d / R);
+                const nx = dx / d * k, ny = dy / d * k;
+                knob.style.transform = `translate(${nx * R}px, ${ny * R}px)`;
+                keys.left = nx < -DEAD; keys.right = nx > DEAD; keys.down = ny > 0.65;
+            }
+            function endStick() { stickId = null; base.style.display = 'none'; keys.left = keys.right = keys.down = false; knob.style.transform = ''; }
+            zone.addEventListener('pointerdown', (e) => {
+                if (stickId !== null) return;
+                audio.init(); stickId = e.pointerId; zone.setPointerCapture(stickId);
+                const r = zone.getBoundingClientRect(); sx = e.clientX; sy = e.clientY;
+                base.style.left = (sx - r.left) + 'px'; base.style.top = (sy - r.top) + 'px'; base.style.display = 'block';
+                applyStick(0, 0);
+            });
+            zone.addEventListener('pointermove', (e) => { if (e.pointerId === stickId) applyStick(e.clientX - sx, e.clientY - sy); });
+            ['pointerup', 'pointercancel'].forEach(t => zone.addEventListener(t, (e) => { if (e.pointerId === stickId) endStick(); }));
+
+            // touch & hold anywhere on the canvas = aim at that point and fire
+            canvas.addEventListener('pointerdown', (e) => {
+                if (e.pointerType !== 'touch' || aimId !== null || gameState !== 'PLAYING' || player.hp <= 0) return;
+                audio.init(); aimId = e.pointerId; canvas.setPointerCapture(aimId);
+                mouse.x = e.clientX; mouse.y = e.clientY; mouse.down = true;
+            });
+            canvas.addEventListener('pointermove', (e) => { if (e.pointerId === aimId) { mouse.x = e.clientX; mouse.y = e.clientY; } });
+            ['pointerup', 'pointercancel'].forEach(t => canvas.addEventListener(t, (e) => { if (e.pointerId === aimId) { aimId = null; mouse.down = false; } }));
+
+            function press(id, fn) {
+                const el = document.getElementById(id);
+                el.addEventListener('pointerdown', (e) => {
+                    e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('down'); audio.init(); fn();
+                });
+                ['pointerup', 'pointercancel'].forEach(t => el.addEventListener(t, () => el.classList.remove('down')));
+            }
+            press('t-jump', doJump);
+            press('t-nade', () => { if (gameState === 'PLAYING' && player.hp > 0) throwGrenade(performance.now() / 1000); });
+            press('t-reload', () => { if (gameState === 'PLAYING' && player.hp > 0) startReload(); });
+            press('t-weapon', () => {
+                if (gameState === 'PLAYING' && player.hp > 0) selectWeapon((player.activeWeaponIdx + 1) % WEAPONS.length);
+            });
+        }
+
         function openModal(tabName = 'play') {
+            setTouchUI(false);
             document.getElementById('modal-overlay').classList.remove('hidden');
             document.getElementById('start-btn-lvl').textContent = SAVE.currentLevel;
             document.getElementById('menu-stars').textContent = SAVE.stars;
@@ -2391,6 +2507,14 @@
             gameState = 'PLAYING';
             document.getElementById('modal-overlay').classList.add('hidden');
             document.getElementById('hud').classList.remove('hidden');
+            setTouchUI(true);
+            try {
+                if (IS_TOUCH && !document.fullscreenElement && document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().then(() => {
+                        if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {});
+                    }).catch(() => {});
+                }
+            } catch (err) {}
 
             renderWeaponBar();
             updateHUD();
@@ -2543,6 +2667,7 @@
             buildLevelArena(SAVE.currentLevel);
             initPlayerForLevel();
             setupEvents();
+            if (IS_TOUCH) setupTouchControls();
             openModal('play');
             requestAnimationFrame(mainLoop);
         };

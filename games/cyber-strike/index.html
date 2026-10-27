@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CYBER STRIKE // 3D Arena FPS</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -116,6 +116,53 @@
             border: 1px solid rgba(0, 243, 255, 0.28);
             box-shadow: 0 0 30px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(0, 243, 255, 0.06);
         }
+
+        /* ===== Touch controls (phones / tablets) ===== */
+        html, body { touch-action: none; overscroll-behavior: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; }
+        #touch-ui, #rotate-hint { display: none; }
+        body.is-touch #touch-ui.on { display: block; }
+        body.is-touch .kb-only { display: none !important; }
+        .touch-only { display: none; }
+        body.is-touch .touch-only { display: block; }
+        #touch-ui { position: fixed; inset: 0; z-index: 25; pointer-events: none; }
+        #touch-ui > * { pointer-events: auto; touch-action: none; }
+        #look-zone { position: absolute; top: 0; bottom: 0; right: 0; left: 40%; pointer-events: auto; }
+        #stick-zone { position: absolute; left: 0; bottom: 0; width: 42%; height: 62%; }
+        #stick-base { position: absolute; width: 124px; height: 124px; margin: -62px 0 0 -62px; border-radius: 50%;
+            border: 2px solid rgba(0,243,255,.55); background: rgba(0,243,255,.08); display: none; pointer-events: none; }
+        #stick-knob { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%;
+            background: rgba(0,243,255,.45); border: 2px solid #00f3ff; }
+        .tbtn { position: absolute; display: grid; place-items: center; border-radius: 50%; color: #e2f9ff; font: 800 11px 'Orbitron', sans-serif;
+            letter-spacing: .08em; background: rgba(9,14,28,.55); border: 2px solid rgba(0,243,255,.6); user-select: none; }
+        .tbtn.down, .tbtn.on { background: rgba(0,243,255,.45); }
+        #t-fire { right: calc(18px + env(safe-area-inset-right)); bottom: calc(22px + env(safe-area-inset-bottom)); width: 86px; height: 86px; border-color: #ff2a5f; font-size: 13px; }
+        #t-fire.down { background: rgba(255,42,95,.5); }
+        #t-jump { right: calc(120px + env(safe-area-inset-right)); bottom: calc(30px + env(safe-area-inset-bottom)); width: 62px; height: 62px; }
+        #t-sprint { right: calc(30px + env(safe-area-inset-right)); bottom: calc(124px + env(safe-area-inset-bottom)); width: 58px; height: 58px; }
+        #t-reload { right: calc(104px + env(safe-area-inset-right)); bottom: calc(104px + env(safe-area-inset-bottom)); width: 50px; height: 50px; }
+        #t-pause { right: calc(150px + env(safe-area-inset-right)); top: calc(12px + env(safe-area-inset-top)); width: 40px; height: 40px; font-size: 14px; }
+        @media (pointer: coarse) {
+            #hud { padding: 8px 12px !important; }
+        }
+        body.is-touch #hud > div:last-child { transform: scale(.78); transform-origin: left bottom; margin-bottom: 0; }
+        body.is-touch #hud > div:last-child > :first-child { opacity: .9; }
+        body.is-touch #menu-overlay { overflow-y: auto; align-items: flex-start; }
+        body.is-touch #menu-overlay > div { margin: auto; }
+        #touch-ui.on ~ a[href="../../index.html"] { display: none; }
+        body.is-touch a[href="../../index.html"] { top: 8px !important; bottom: auto !important; left: 8px !important; transform: none !important; }
+        @media (max-height: 480px) {
+            #menu-overlay > div { padding: 12px 20px !important; }
+            #menu-overlay .mb-6 { margin-bottom: 10px !important; }
+            #menu-overlay .mb-4 { margin-bottom: 8px !important; }
+            #menu-title { font-size: 1.8rem !important; }
+            #menu-badge { display: none; }
+            #primary-btn { padding-top: 10px !important; padding-bottom: 10px !important; }
+        }
+        @media (orientation: portrait) {
+            body.is-touch #rotate-hint { display: flex; position: fixed; inset: 0; z-index: 60; background: #050811; color: #00f3ff;
+                align-items: center; justify-content: center; flex-direction: column; gap: 12px; text-align: center;
+                font: 700 18px 'Orbitron', sans-serif; letter-spacing: .12em; padding: 24px; }
+        }
         @keyframes pulse-border {
             0%, 100% { border-color: rgba(0, 243, 255, 0.35); }
             50% { border-color: rgba(0, 243, 255, 0.85); }
@@ -129,6 +176,18 @@
 
     <!-- 3D WebGL Canvas Container -->
     <div id="canvas-container"></div>
+
+
+    <div id="rotate-hint"><div style="font-size:42px">&#8635;</div>ROTATE YOUR DEVICE<div style="font:500 13px Rajdhani,sans-serif;letter-spacing:.08em;color:#94a3b8">Cyber Strike plays in landscape</div></div>
+    <div id="touch-ui">
+        <div id="look-zone"></div>
+        <div id="stick-zone"><div id="stick-base"><div id="stick-knob"></div></div></div>
+        <div id="t-pause" class="tbtn">&#10074;&#10074;</div>
+        <div id="t-sprint" class="tbtn">SPRINT</div>
+        <div id="t-reload" class="tbtn">RLD</div>
+        <div id="t-jump" class="tbtn">JUMP</div>
+        <div id="t-fire" class="tbtn">FIRE</div>
+    </div>
 
     <!-- Screen Vignettes -->
     <div id="damage-overlay"></div>
@@ -292,7 +351,10 @@
             </div>
 
             <!-- Controls Reference Grid -->
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6 text-xs sm:text-sm">
+            <div class="touch-only mb-4 p-3 rounded bg-slate-900/70 border border-slate-800 text-xs text-slate-300 leading-relaxed">
+                <span class="text-cyan-400 font-cyber font-bold">TOUCH:</span> left thumb = move &middot; drag right side = aim &middot; FIRE / JUMP / SPRINT (tap to toggle) / RLD buttons.
+            </div>
+            <div class="kb-only grid grid-cols-2 sm:grid-cols-3 gap-2.5 mb-6 text-xs sm:text-sm">
                 <div class="p-3 rounded bg-slate-900/70 border border-slate-800 flex flex-col">
                     <span class="text-cyan-400 font-cyber font-bold">W A S D</span>
                     <span class="text-slate-300 mt-0.5">Tactical Movement</span>
@@ -521,6 +583,9 @@
             }
         }
 
+        const IS_TOUCH = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || 'ontouchstart' in window;
+        if (IS_TOUCH) document.body.classList.add('is-touch');
+
         const sfx = new SoundSystem();
 
         // ==================== 2. GAME STATE & CONFIGURATION ====================
@@ -636,7 +701,7 @@
 
             renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, IS_TOUCH ? 1.5 : 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             container.appendChild(renderer.domElement);
@@ -1627,6 +1692,7 @@
             STATE.health = STATE.maxHealth;
             STATE.stamina = 100;
             STATE.sprintToggled = false;
+            document.getElementById('t-sprint').classList.remove('on');
             STATE.ammo = CONFIG.maxAmmo;
             STATE.isReloading = false;
             STATE.isMouseDown = false;
@@ -1642,14 +1708,100 @@
 
         function lockPointerAndPlay() {
             sfx.init();
+            if (IS_TOUCH) { startTouchPlay(); return; }
             const canvas = renderer.domElement;
             if (canvas.requestPointerLock) {
                 canvas.requestPointerLock();
             }
         }
 
+        // ==================== TOUCH CONTROLS ====================
+        const touchUI = document.getElementById('touch-ui');
+        function setTouchUI(on) {
+            touchUI.classList.toggle('on', on && IS_TOUCH);
+            if (!on) {
+                keys.w = keys.a = keys.s = keys.d = keys.space = false;
+                STATE.isMouseDown = false;
+            }
+        }
+        function startTouchPlay() {
+            STATE.mode = 'PLAYING';
+            ui.menuOverlay.classList.add('hidden');
+            ui.hud.classList.remove('hidden');
+            setTouchUI(true);
+            clock.getDelta();
+            try {
+                const el = document.documentElement;
+                if (!document.fullscreenElement && el.requestFullscreen) {
+                    el.requestFullscreen().then(() => {
+                        if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {});
+                    }).catch(() => {});
+                }
+            } catch (err) {}
+        }
+        function setupTouchControls() {
+            const zone = document.getElementById('stick-zone');
+            const base = document.getElementById('stick-base');
+            const knob = document.getElementById('stick-knob');
+            const look = document.getElementById('look-zone');
+            let stickId = null, sx = 0, sy = 0, lookId = null, lx = 0, ly = 0;
+            const R = 52, DEAD = 0.28;
+
+            function applyStick(dx, dy) {
+                const d = Math.hypot(dx, dy) || 1;
+                const k = Math.min(1, d / R);
+                const nx = dx / d * k, ny = dy / d * k;
+                knob.style.transform = `translate(${nx * R}px, ${ny * R}px)`;
+                keys.a = nx < -DEAD; keys.d = nx > DEAD;
+                keys.w = ny < -DEAD; keys.s = ny > DEAD;
+            }
+            function endStick() {
+                stickId = null; base.style.display = 'none';
+                keys.w = keys.a = keys.s = keys.d = false;
+                knob.style.transform = '';
+            }
+            zone.addEventListener('pointerdown', (e) => {
+                if (stickId !== null || STATE.mode !== 'PLAYING') return;
+                stickId = e.pointerId; zone.setPointerCapture(stickId);
+                const r = zone.getBoundingClientRect();
+                sx = e.clientX; sy = e.clientY;
+                base.style.left = (sx - r.left) + 'px'; base.style.top = (sy - r.top) + 'px'; base.style.display = 'block';
+                applyStick(0, 0);
+            });
+            zone.addEventListener('pointermove', (e) => { if (e.pointerId === stickId) applyStick(e.clientX - sx, e.clientY - sy); });
+            ['pointerup', 'pointercancel'].forEach(t => zone.addEventListener(t, (e) => { if (e.pointerId === stickId) endStick(); }));
+
+            look.addEventListener('pointerdown', (e) => {
+                if (lookId !== null) return;
+                lookId = e.pointerId; look.setPointerCapture(lookId); lx = e.clientX; ly = e.clientY;
+            });
+            look.addEventListener('pointermove', (e) => {
+                if (e.pointerId !== lookId || STATE.mode !== 'PLAYING') return;
+                const sens = CONFIG.baseSensitivity * STATE.sensitivityMultiplier * 1.7;
+                cameraEuler.y -= (e.clientX - lx) * sens;
+                cameraEuler.x = Math.max(-Math.PI / 2.15, Math.min(Math.PI / 2.15, cameraEuler.x - (e.clientY - ly) * sens));
+                lx = e.clientX; ly = e.clientY;
+            });
+            ['pointerup', 'pointercancel'].forEach(t => look.addEventListener(t, (e) => { if (e.pointerId === lookId) lookId = null; }));
+
+            function hold(id, down, up) {
+                const el = document.getElementById(id);
+                el.addEventListener('pointerdown', (e) => { e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add('down'); down(); });
+                ['pointerup', 'pointercancel'].forEach(t => el.addEventListener(t, () => { el.classList.remove('down'); if (up) up(); }));
+            }
+            hold('t-fire', () => { if (STATE.mode === 'PLAYING') { STATE.isMouseDown = true; attemptShoot(); } }, () => { STATE.isMouseDown = false; });
+            hold('t-jump', () => { keys.space = true; }, () => { keys.space = false; });
+            hold('t-reload', () => { if (STATE.mode === 'PLAYING') triggerReload(); });
+            hold('t-sprint', () => {
+                STATE.sprintToggled = !STATE.sprintToggled;
+                document.getElementById('t-sprint').classList.toggle('on', STATE.sprintToggled);
+            });
+            hold('t-pause', () => { setTouchUI(false); showPauseMenu(); });
+        }
+
         function showPauseMenu() {
             STATE.mode = 'PAUSED';
+            setTouchUI(false);
             STATE.isMouseDown = false;
             ui.menuBadge.textContent = 'Simulation Paused';
             ui.menuTitle.textContent = 'SYSTEM PAUSED';
@@ -1667,6 +1819,7 @@
         function triggerGameOver() {
             STATE.mode = 'GAMEOVER';
             STATE.isMouseDown = false;
+            setTouchUI(false);
             if (document.pointerLockElement) {
                 document.exitPointerLock();
             }
@@ -1804,6 +1957,7 @@
         window.onload = function () {
             initThree();
             setupInputListeners();
+            if (IS_TOUCH) setupTouchControls();
             gameLoop();
         };
     </script>
