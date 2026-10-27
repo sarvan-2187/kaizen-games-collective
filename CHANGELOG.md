@@ -6,4 +6,5 @@ Every merged pull request is added here automatically, newest first.
 
 ## 2026-10-27
 
+- **New game:** [Turbo Laps](https://sarvan-2187.github.io/kaizen-games-collective/games/turbo-laps/) by [sarvan-2187](https://github.com/sarvan-2187) ([#2](https://github.com/sarvan-2187/kaizen-games-collective/pull/2))
 - **Platform:** Initial release with [Cyber Strike](https://sarvan-2187.github.io/kaizen-games-collective/games/cyber-strike/) and [Stickman Warfare](https://sarvan-2187.github.io/kaizen-games-collective/games/stickman-warfare/)

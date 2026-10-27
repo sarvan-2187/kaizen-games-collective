@@ -7,7 +7,7 @@
 Free browser games, built in the open. Every game is a plain HTML page, runs on desktop and phones, and is made by a named contributor.
 
 <!-- STATS:START -->
-![Games](https://img.shields.io/badge/games-2-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
+![Games](https://img.shields.io/badge/games-3-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
 <!-- STATS:END -->
 
 **Play:** https://sarvan-2187.github.io/kaizen-games-collective/
@@ -21,6 +21,7 @@ Free browser games, built in the open. Every game is a plain HTML page, runs on 
 | --- | --- | --- | --- | --- |
 | [**Cyber Strike**](https://sarvan-2187.github.io/kaizen-games-collective/games/cyber-strike/) | 3D arena FPS | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
 | [**Stickman Warfare**](https://sarvan-2187.github.io/kaizen-games-collective/games/stickman-warfare/) | 2D shooter | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
+| [**Turbo Laps**](https://sarvan-2187.github.io/kaizen-games-collective/games/turbo-laps/) | Racing | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
 <!-- GAMES:END -->
 
 The table above and the makers below are generated automatically after every merged pull request from each game's `game.json`; please don't edit them by hand.
@@ -74,7 +75,7 @@ On deploy, the build copies the site to `_site/`, writes `games.json`, and adds 
 <!-- CONTRIBUTORS:START -->
 <table>
 <tr>
-<td align="center" valign="top" width="16%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Stickman Warfare</sub></td>
+<td align="center" valign="top" width="16%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Stickman Warfare, Turbo Laps</sub></td>
 </tr>
 </table>
 <!-- CONTRIBUTORS:END -->
