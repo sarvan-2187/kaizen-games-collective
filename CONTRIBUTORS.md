@@ -4,7 +4,7 @@ Everyone who has made a game in the collective. This page is generated automatic
 
 <table>
 <tr>
-<td align="center" valign="top" width="20%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Neon Snake, Stickman Warfare, Turbo Laps</sub></td>
+<td align="center" valign="top" width="20%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Kaizen Battle Royale, Neon Snake, Stickman Warfare, Turbo Laps</sub></td>
 </tr>
 </table>
 
@@ -13,6 +13,7 @@ Everyone who has made a game in the collective. This page is generated automatic
 ### [sarvan-2187](https://github.com/sarvan-2187)
 
 - [Cyber Strike](https://sarvan-2187.github.io/kaizen-games-collective/games/cyber-strike/): Hold a neon arena against waves of hostile drones with a pulse carbine. Tap Shift once to sprint. (MIT)
+- [Kaizen Battle Royale](https://sarvan-2187.github.io/kaizen-games-collective/games/kaizen-battle-royale/): Drop onto an anime-styled Japanese island with 29 rivals. Loot, fight, outrun the closing storm and be the last one standing. (MIT)
 - [Neon Snake](https://sarvan-2187.github.io/kaizen-games-collective/games/neon-snake/): Guide a glowing snake around a neon grid and eat the dots. Swipe or use the arrow keys. (MIT)
 - [Stickman Warfare](https://sarvan-2187.github.io/kaizen-games-collective/games/stickman-warfare/): Hand-drawn notebook battles with six weapons, ragdolls, upgrades and 30 campaign levels. (MIT)
 - [Turbo Laps](https://sarvan-2187.github.io/kaizen-games-collective/games/turbo-laps/): Race two rivals over 3 laps of a looping circuit. Stay on the tarmac, grass slows you down. (MIT)

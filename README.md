@@ -7,7 +7,7 @@
 Free browser games, built in the open. Every game is a plain HTML page, runs on desktop and phones, and is made by a named contributor.
 
 <!-- STATS:START -->
-![Games](https://img.shields.io/badge/games-4-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
+![Games](https://img.shields.io/badge/games-5-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
 <!-- STATS:END -->
 
 **Play:** https://sarvan-2187.github.io/kaizen-games-collective/
@@ -20,6 +20,7 @@ Free browser games, built in the open. Every game is a plain HTML page, runs on 
 | Game | Genre | By | Platforms | License |
 | --- | --- | --- | --- | --- |
 | [**Cyber Strike**](https://sarvan-2187.github.io/kaizen-games-collective/games/cyber-strike/) | 3D arena FPS | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
+| [**Kaizen Battle Royale**](https://sarvan-2187.github.io/kaizen-games-collective/games/kaizen-battle-royale/) | 3D battle royale | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
 | [**Neon Snake**](https://sarvan-2187.github.io/kaizen-games-collective/games/neon-snake/) | Arcade | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
 | [**Stickman Warfare**](https://sarvan-2187.github.io/kaizen-games-collective/games/stickman-warfare/) | 2D shooter | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
 | [**Turbo Laps**](https://sarvan-2187.github.io/kaizen-games-collective/games/turbo-laps/) | Racing | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
@@ -76,7 +77,7 @@ On deploy, the build copies the site to `_site/`, writes `games.json`, and adds 
 <!-- CONTRIBUTORS:START -->
 <table>
 <tr>
-<td align="center" valign="top" width="16%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Neon Snake, Stickman Warfare, Turbo Laps</sub></td>
+<td align="center" valign="top" width="16%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Kaizen Battle Royale, Neon Snake, Stickman Warfare, Turbo Laps</sub></td>
 </tr>
 </table>
 <!-- CONTRIBUTORS:END -->
