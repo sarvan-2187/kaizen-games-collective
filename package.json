@@ -11,6 +11,7 @@
     "validate": "node scripts/validate.mjs",
     "build": "node scripts/build.mjs",
     "preview": "node scripts/build.mjs && node scripts/preview.mjs",
-    "test": "node --test scripts/ingest.test.mjs"
+    "test": "node --test scripts/*.test.mjs",
+    "docs": "node scripts/update-readme.mjs"
   }
 }

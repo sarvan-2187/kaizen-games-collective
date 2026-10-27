@@ -6,18 +6,24 @@
 
 Free browser games, built in the open. Every game is a plain HTML page, runs on desktop and phones, and is made by a named contributor.
 
+<!-- STATS:START -->
+![Games](https://img.shields.io/badge/games-2-e63946?style=flat-square) ![Makers](https://img.shields.io/badge/makers-1-d9a441?style=flat-square) ![License](https://img.shields.io/badge/license-MIT-4361ee?style=flat-square)
+<!-- STATS:END -->
+
 **Play:** https://sarvan-2187.github.io/kaizen-games-collective/
 
 *Kaizen* (改善) means "change for the better". Games here get a little better with every pull request.
 
 ## Games
 
-| Game | Genre | By | Mobile |
-| --- | --- | --- | --- |
-| [Cyber Strike](games/cyber-strike) | 3D arena FPS | [@sarvan-2187](https://github.com/sarvan-2187) | Yes |
-| [Stickman Warfare](games/stickman-warfare) | 2D shooter, 30 levels | [@sarvan-2187](https://github.com/sarvan-2187) | Yes |
+<!-- GAMES:START -->
+| Game | Genre | By | Platforms | License |
+| --- | --- | --- | --- | --- |
+| [**Cyber Strike**](https://sarvan-2187.github.io/kaizen-games-collective/games/cyber-strike/) | 3D arena FPS | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
+| [**Stickman Warfare**](https://sarvan-2187.github.io/kaizen-games-collective/games/stickman-warfare/) | 2D shooter | [sarvan-2187](https://github.com/sarvan-2187) | Desktop and mobile | MIT |
+<!-- GAMES:END -->
 
-The live site builds this list automatically from each game's `game.json`, including the credits on the **Makers** section of the home page.
+The table above and the makers below are generated automatically after every merged pull request from each game's `game.json`; please don't edit them by hand.
 
 ## Submit your game
 
@@ -44,7 +50,7 @@ assets/fonts/              Mona Sans (SIL Open Font License)
 games/<slug>/index.html    One folder per game
 games/<slug>/game.json     Name, authors, license, controls, etc.
 templates/game-template/   Starter to copy for new games
-scripts/                   validate / build / preview / form-submission bot (Node 20+, no dependencies)
+scripts/                   validate / build / preview / docs / form-submission bot (Node 20+, no dependencies)
 .github/                   Issue forms, PR template, CI, CODEOWNERS
 docs/                      Maintainer notes
 ```
@@ -53,7 +59,8 @@ docs/                      Maintainer notes
 
 ```bash
 npm run validate   # check every game's game.json and files
-npm test           # tests for the form-submission bot
+npm run docs       # regenerate the README games table and CONTRIBUTORS.md
+npm test           # tests for the bots and generators
 npm run build      # build the site into _site/
 npm run preview    # build, then serve at http://localhost:8080
 ```
@@ -61,6 +68,18 @@ npm run preview    # build, then serve at http://localhost:8080
 Node 20 or newer is all you need; there is nothing to `npm install`.
 
 On deploy, the build copies the site to `_site/`, writes `games.json`, and adds a small bar (back to the collective, report a bug) to every game page. You don't add this yourself.
+
+## Makers
+
+<!-- CONTRIBUTORS:START -->
+<table>
+<tr>
+<td align="center" valign="top" width="16%"><a href="https://github.com/sarvan-2187"><img src="https://github.com/sarvan-2187.png?size=96" width="72" height="72" alt="sarvan-2187"><br><sub><b>sarvan-2187</b></sub></a><br><sub>Cyber Strike, Stickman Warfare</sub></td>
+</tr>
+</table>
+<!-- CONTRIBUTORS:END -->
+
+Full list with each maker's games: [CONTRIBUTORS.md](CONTRIBUTORS.md). Release history: [CHANGELOG.md](CHANGELOG.md).
 
 ## Community
 

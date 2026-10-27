@@ -48,6 +48,12 @@ for (const g of games) {
   let html = fs.readFileSync(file, 'utf8');
   const i = html.toLowerCase().lastIndexOf('</body>');
   html = i === -1 ? html + bar(g.slug) : html.slice(0, i) + bar(g.slug) + html.slice(i);
+  // Give games without their own icon the collective's favicon.
+  if (!/<link[^>]+rel=["'](?:shortcut )?icon["']/i.test(html)) {
+    const icon = '<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">\n<link rel="icon" href="../../assets/favicon-32.png" type="image/png" sizes="32x32">\n';
+    const h = html.search(/<\/head>/i);
+    html = h === -1 ? icon + html : html.slice(0, h) + icon + html.slice(h);
+  }
   fs.writeFileSync(file, html);
 }
 console.log(`Built ${games.length} game(s) into ${path.relative(ROOT, OUT)}/ for ${REPO}`);

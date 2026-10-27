@@ -1,0 +1,37 @@
+name: Welcome first-time contributors
+# Comments once on a person's first issue or pull request. Reads only metadata; never checks out PR code.
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+permissions:
+  issues: write
+  pull-requests: write
+jobs:
+  welcome:
+    if: >-
+      !endsWith(github.actor, '[bot]') &&
+      (github.event.issue.author_association == 'FIRST_TIME_CONTRIBUTOR' ||
+       github.event.issue.author_association == 'FIRST_TIMER' ||
+       github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR' ||
+       github.event.pull_request.author_association == 'FIRST_TIMER')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
+      AUTHOR: ${{ github.event.sender.login }}
+    steps:
+      - name: Say hello
+        run: |
+          cat > "$RUNNER_TEMP/welcome.md" <<EOF2
+          Welcome to Kaizen Games Collective, @${AUTHOR}! Thanks for taking part.
+
+          - Making a game? The [contributing guide](https://github.com/${GH_REPO}/blob/main/CONTRIBUTING.md) covers the rules and both ways to submit (form or pull request).
+          - A maintainer reads every game before it goes live, so expect a review comment rather than an instant merge.
+          - Please be kind: we follow the [Code of Conduct](https://github.com/${GH_REPO}/blob/main/CODE_OF_CONDUCT.md).
+
+          If you get stuck, just reply here.
+          EOF2
+          gh issue comment "$NUMBER" --body-file "$RUNNER_TEMP/welcome.md"

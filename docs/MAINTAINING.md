@@ -18,7 +18,8 @@ Do these once, in this order.
 - [ ] Actions → General → Workflow permissions: tick **Allow GitHub Actions to create and approve pull requests**. The form-submission bot needs this to open pull requests (it asks for write access per workflow, so the read default stays).
 - [ ] Security: enable private vulnerability reporting, Dependabot alerts and secret scanning.
 - [ ] Pages: Source = **GitHub Actions**. (Pages on a private repo needs a paid GitHub plan; it is free once the repo is public.)
-- [ ] Issues → Labels: create `game-proposal`, `game-bug`, `good first issue`, `needs-author` and `mobile`.
+- [ ] Issues → Labels: the bots create `game-submission`, `game`, `docs`, `platform`, `automation` and `game:<slug>` labels for you. Add `good first issue` and `help wanted` by hand if you want them.
+- [ ] Settings → General: tick "Allow auto-merge" (used by the docs-update fallback).
 
 ## Reviewing a game submission
 
@@ -48,6 +49,28 @@ Notes:
 - Attachment downloads work for public repos. In a private repo the bot retries with its token; if GitHub still refuses, ask the submitter to link a public repo instead.
 - If the **Validate games** check is required but shows as missing on a bot PR, re-run it from the Actions tab (workflow dispatch on the `submission/issue-<n>` branch).
 - To change the form fields, update `LABELS` in `scripts/ingest-lib.mjs` too. `npm test` fails if they drift apart.
+
+## What runs automatically
+
+| Workflow | When | What it does |
+| --- | --- | --- |
+| `validate.yml` | every PR / branch push | Validates games, runs tests, builds the site |
+| `pages.yml` | push to `main` | Builds and deploys the site |
+| `game-submission.yml` | issue opened/edited with the submission form | Turns the form into a PR (see above) |
+| `labeler.yml` | PR opened/updated | Labels `game`, `docs`, `platform` from the files changed |
+| `issue-triage.yml` | bug report / idea opened | Labels `game:<slug>` and tags that game's authors |
+| `welcome.yml` | a person's first issue or PR | Friendly welcome with the next steps |
+| `post-merge.yml` | PR merged (or run manually) | Regenerates the README games table, stats and makers grid plus `CONTRIBUTORS.md`, adds the PR to `CHANGELOG.md`, publishes a release (`v<date>-<PR#>`), and thanks the contributor with the live link |
+
+The README sections between `<!-- GAMES:START -->`, `<!-- STATS:START -->` and `<!-- CONTRIBUTORS:START -->` markers, and all of `CONTRIBUTORS.md`, are generated from each game's `game.json`. Never edit them by hand; run `npm run docs` locally to preview. Everything outside the markers is yours to edit. Contributors are the **game authors** listed in `game.json`.
+
+**Bot commits and branch protection.** `post-merge.yml` commits to `main` as `kaizen-games-bot` (message ends in `[skip ci]`, so it doesn't redeploy). The default `GITHUB_TOKEN` cannot push to a branch that requires pull requests. Pick one:
+
+1. *Simplest:* leave "Require a pull request" off for `main` until you have more maintainers.
+2. *Recommended once protected:* create a fine-grained personal access token (or a GitHub App) owned by a repo admin with **Contents: read and write** and **Pull requests: read and write**, allow it to bypass the branch rule (rulesets: add it, or its owner, to the bypass list), and save it as the repository secret `AUTOMATION_TOKEN`. The workflow uses it automatically.
+3. *Fallback (already built in):* if the direct push is refused, the bot opens a `docs: update ...` pull request labelled `automation` and enables auto-merge. This needs Settings → General → "Allow auto-merge" and, if the **Validate games** check is required, it is run for you automatically. If you also require a code-owner review, you will have to approve these yourself.
+
+Releases and README updates are skipped if a docs pull request was needed (the next merge catches up, since the generator always rebuilds from the current games).
 
 ## Credits and bug reports
 

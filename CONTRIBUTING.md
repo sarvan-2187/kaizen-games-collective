@@ -105,6 +105,10 @@ Test your game on a real phone if you claim touch support.
 - Fill in the pull request template. CI will validate your files and report problems on the PR.
 - A maintainer reviews the code of every game before merge. We read the JavaScript, because your game will run on our domain. Obfuscated or minified-only code without source will be asked to include the source.
 
+## After your pull request is merged
+
+You don't need to do anything. A bot adds your game to the README table, lists you on the makers grid and `CONTRIBUTORS.md` (from the `authors` in your `game.json`), records the change in `CHANGELOG.md`, publishes a release, and comments on your pull request with your game's live link.
+
 ## Updating or fixing an existing game
 
 Small fixes (typos, bugs, mobile fixes) can go straight to a pull request. If you are not already listed in `authors`, add yourself in the same PR when your contribution is substantial; the original author or a maintainer will confirm.

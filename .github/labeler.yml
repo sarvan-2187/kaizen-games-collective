@@ -1,0 +1,10 @@
+# Used by .github/workflows/labeler.yml to label pull requests from the files they change.
+game:
+  - changed-files:
+      - any-glob-to-any-file: ['games/**']
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ['**/*.md', 'docs/**']
+platform:
+  - changed-files:
+      - any-glob-to-any-file: ['scripts/**', '.github/**', 'index.html', 'assets/**', 'package.json']

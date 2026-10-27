@@ -18,5 +18,7 @@ jobs:
         run: npm run validate
       - name: Run tests
         run: npm test
+      - name: Check the README generator runs
+        run: npm run docs
       - name: Build the site
         run: npm run build

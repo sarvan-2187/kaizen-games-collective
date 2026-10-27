@@ -1,0 +1,44 @@
+name: Triage issues
+# Labels bug reports and ideas with the game they are about and tells that game's authors.
+on:
+  issues:
+    types: [opened, edited]
+permissions:
+  contents: read
+  issues: write
+jobs:
+  triage:
+    if: >-
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.body, '### Game')
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Label by game and notify its authors
+        run: |
+          set -euo pipefail
+          result=$(node scripts/triage-issue.mjs)
+          slug=$(jq -r .slug <<<"$result")
+          [ -n "$slug" ] || exit 0
+          [[ "$slug" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || exit 0
+          label="game:$slug"
+          [ "$slug" = "site" ] && label="site"
+          gh label create "$label" --color 0e8a16 --description "About $slug" 2>/dev/null || true
+          gh issue edit "$ISSUE_NUMBER" --add-label "$label"
+          if [ "$(jq -r .known <<<"$result")" = "true" ]; then
+            if ! gh issue view "$ISSUE_NUMBER" --json comments --jq '.comments[].body' | grep -q 'kaizen-triage'; then
+              mentions=$(jq -r '.authors | map("@" + .) | join(" ")' <<<"$result")
+              printf '<!-- kaizen-triage -->\nThanks for the report! %s: this is about **%s**, which you made. A maintainer will triage it, and pull requests with a fix are welcome.\n' "$mentions" "$slug" > "$RUNNER_TEMP/triage.md"
+              gh issue comment "$ISSUE_NUMBER" --body-file "$RUNNER_TEMP/triage.md"
+            fi
+          fi

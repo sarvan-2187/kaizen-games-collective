@@ -1,0 +1,99 @@
+name: Post-merge automation
+# After a pull request is merged: refresh the README games table and makers list, record the change in
+# CHANGELOG.md, publish a release, and thank the contributor. Run it manually to just refresh the docs.
+#
+# pull_request_target is used so it also works for fork PRs. It never checks out or runs PR code:
+# it only reads PR metadata and the changed-file list, and runs the scripts from the main branch.
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+concurrency:
+  group: post-merge
+  cancel-in-progress: false
+jobs:
+  update:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.AUTOMATION_TOKEN || github.token }}
+      GH_REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      PR_BODY: ${{ github.event.pull_request.body }}
+      MERGED_AT: ${{ github.event.pull_request.merged_at }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.AUTOMATION_TOKEN || github.token }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Refresh README and contributors
+        run: node scripts/update-readme.mjs
+
+      - name: Update changelog and prepare messages
+        if: github.event_name == 'pull_request_target'
+        env:
+          FILES_JSON: ${{ runner.temp }}/files.json
+          OUT_DIR: ${{ runner.temp }}
+        run: |
+          gh api "repos/$GH_REPO/pulls/$PR_NUMBER/files" --paginate --jq '[.[] | {filename, status}]' | jq -s 'add' > "$FILES_JSON"
+          node scripts/changelog.mjs
+
+      - name: Commit and push
+        id: push
+        run: |
+          set -euo pipefail
+          git config user.name "kaizen-games-bot"
+          git config user.email "kaizen-games-bot@users.noreply.github.com"
+          if git diff --quiet; then echo "Docs already up to date."; echo "pushed=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          git add README.md CONTRIBUTORS.md CHANGELOG.md
+          git commit -m "docs: update README, contributors and changelog [skip ci]"
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then echo "pushed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+            git pull --rebase origin main || { git rebase --abort 2>/dev/null || true; break; }
+          done
+          # main is protected: fall back to a pull request that merges itself once checks pass.
+          branch="bot/docs-update-${GITHUB_RUN_ID}"
+          git push origin "HEAD:refs/heads/$branch"
+          gh label create automation --color ededed --description "Opened by a bot" 2>/dev/null || true
+          pr=$(gh pr create --base main --head "$branch" --title "docs: update README, contributors and changelog" --label automation \
+            --body "Automatic update after #${PR_NUMBER:-manual}. Direct pushes to main are blocked, so this goes through a pull request. See docs/MAINTAINING.md for how to let the bot push directly.")
+          gh workflow run validate.yml --ref "$branch" || true
+          gh pr merge "$pr" --auto --squash --delete-branch || echo "Auto-merge is not enabled; a maintainer needs to merge $pr."
+          echo "pushed=pr" >> "$GITHUB_OUTPUT"
+
+      - name: Publish a release
+        if: github.event_name == 'pull_request_target' && steps.push.outputs.pushed != 'pr'
+        env:
+          OUT_DIR: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          tag=$(jq -r .tag "$OUT_DIR/meta.json")
+          label=$(jq -r .label "$OUT_DIR/meta.json")
+          [[ "$tag" =~ ^v[0-9.]+-[0-9]+$ ]] || { echo "bad tag"; exit 1; }
+          if gh release view "$tag" >/dev/null 2>&1; then echo "Release $tag exists."; exit 0; fi
+          gh release create "$tag" --target "$(git rev-parse HEAD)" --title "$label: PR #$PR_NUMBER" --notes-file "$OUT_DIR/release-notes.md"
+
+      - name: Thank the contributor
+        if: github.event_name == 'pull_request_target'
+        env:
+          OUT_DIR: ${{ runner.temp }}
+        run: |
+          set -euo pipefail
+          [ -s "$OUT_DIR/thanks.md" ] || exit 0
+          gh pr comment "$PR_NUMBER" --body-file "$OUT_DIR/thanks.md"
+          # Form submissions: the bot's PR says "Closes #N"; also tell the person on their own issue.
+          if [[ "$PR_BODY" =~ Closes\ \#([0-9]+) ]]; then
+            gh issue comment "${BASH_REMATCH[1]}" --body-file "$OUT_DIR/thanks.md"
+          fi
