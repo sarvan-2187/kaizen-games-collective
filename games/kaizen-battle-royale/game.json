@@ -1,0 +1,13 @@
+{
+  "slug": "kaizen-battle-royale",
+  "name": "Kaizen Battle Royale",
+  "jpTitle": "改善大乱戦",
+  "description": "Drop onto an anime-styled Japanese island with 29 rivals. Loot, fight, outrun the closing storm and be the last one standing.",
+  "authors": [{ "name": "sarvan-2187", "github": "sarvan-2187" }],
+  "license": "MIT",
+  "version": "1.0.0",
+  "genre": "3D battle royale",
+  "tags": ["battle-royale", "3d", "shooter", "anime", "single-player"],
+  "controls": ["keyboard", "mouse", "touch"],
+  "accent": "#ff7aa8"
+}
