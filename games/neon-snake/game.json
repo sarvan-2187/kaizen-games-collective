@@ -1,0 +1,25 @@
+{
+  "slug": "neon-snake",
+  "name": "Neon Snake",
+  "description": "Guide a glowing snake around a neon grid and eat the dots. Swipe or use the arrow keys.",
+  "authors": [
+    {
+      "name": "sarvan-2187",
+      "github": "sarvan-2187"
+    }
+  ],
+  "license": "MIT",
+  "version": "1.0.0",
+  "genre": "Arcade",
+  "tags": [
+    "snake",
+    "arcade",
+    "casual"
+  ],
+  "controls": [
+    "keyboard",
+    "touch"
+  ],
+  "accent": "#f472b6",
+  "jpTitle": "蛇"
+}
