@@ -25,7 +25,12 @@ async function download(url, dest) {
     const headers = u.hostname === 'github.com' && TOKEN ? { Authorization: `Bearer ${TOKEN}` } : {};
     const res = await fetch(cur, { redirect: 'manual', headers });
     if (res.status >= 300 && res.status < 400 && res.headers.get('location')) { cur = new URL(res.headers.get('location'), cur).href; continue; }
-    if (!res.ok) throw new Error(`Could not download the zip (HTTP ${res.status}). Re-upload it and edit the issue.`);
+    if (!res.ok) {
+      const hint = [401, 403, 404].includes(res.status)
+        ? ' If the zip was uploaded but this keeps failing, the repository may still be private (GitHub does not let bots download attachments from private repos). Try again once the repository is public, or link a public GitHub repository instead.'
+        : '';
+      throw new Error(`Could not download the zip (HTTP ${res.status}). Re-upload it and edit the issue.${hint}`);
+    }
     const buf = Buffer.from(await res.arrayBuffer());
     if (buf.length > LIMITS.zipBytes) throw new Error('The zip is larger than 25 MB.');
     fs.writeFileSync(dest, buf);
