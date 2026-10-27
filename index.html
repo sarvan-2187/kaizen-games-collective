@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaizen Games Collective</title>
+<meta name="description" content="Kaizen Games Collective: free browser games. Play Cyber Strike and Stickman Warfare, no install needed.">
+<style>
+:root{--bg:#0b0d12;--surface:#141821;--border:#262c3a;--text:#e8ebf2;--muted:#9aa3b5;--accent:#ffb020;--cyan:#22d3ee;--ink:#2b2b2b}
+@media (prefers-color-scheme:light){:root:not([data-theme=dark]){--bg:#f6f4ef;--surface:#fff;--border:#ddd8cb;--text:#1c1d22;--muted:#5d6272;--accent:#b36b00;--cyan:#0e7490}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+header{padding:56px 0 32px}
+.brand{font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:clamp(2rem,6vw,3.4rem);line-height:1.1;margin:.3em 0 .4em}
+.lead{color:var(--muted);max-width:56ch;margin:0}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));padding-bottom:48px}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;transition:transform .15s,border-color .15s}
+.card:hover,.card:focus-visible{transform:translateY(-3px);border-color:var(--accent);outline:none}
+.art{height:170px;display:grid;place-items:center;font-size:3.2rem;font-weight:900;letter-spacing:.06em}
+.cyber .art{background:radial-gradient(circle at 30% 30%,#0b3a4a,#05070d);color:#22d3ee;text-shadow:0 0 18px #22d3ee}
+.stick .art{background:#f4efe0 repeating-linear-gradient(0deg,transparent 0 27px,#b9cde4 27px 28px);color:var(--ink);font-family:"Marker Felt","Comic Sans MS",cursive}
+.body{padding:18px 20px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tag{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+h2{margin:0;font-size:1.4rem}
+.body p{margin:0;color:var(--muted)}
+.keys{font-size:.85rem;color:var(--muted);margin-top:auto;padding-top:8px}
+.play{display:inline-block;margin-top:10px;align-self:flex-start;background:var(--accent);color:#16120a;font-weight:700;padding:9px 18px;border-radius:8px}
+footer{border-top:1px solid var(--border);padding:24px 0 40px;color:var(--muted);font-size:.9rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div class="brand">Kaizen Games Collective</div>
+<h1>Small games, always getting better.</h1>
+<p class="lead">Kaizen means continuous improvement. Every game here is free, runs in your browser, and gets tuned over time. Pick one and play.</p>
+</header>
+<main class="grid">
+<a class="card cyber" href="games/cyber-strike/">
+<div class="art">CYBER STRIKE</div>
+<div class="body">
+<span class="tag">3D arena FPS &middot; Desktop</span>
+<h2>Cyber Strike</h2>
+<p>Hold the arena against waves of hostile drones with a pulse carbine. Press Shift once to sprint continuously.</p>
+<div class="keys">WASD move &middot; Mouse aim &middot; Space jump &middot; Shift toggle sprint &middot; R reload</div>
+<span class="play">Play now</span>
+</div>
+</a>
+<a class="card stick" href="games/stickman-warfare/">
+<div class="art">STICKMAN WARFARE</div>
+<div class="body">
+<span class="tag">2D shooter &middot; 30 levels &middot; Desktop</span>
+<h2>Stickman Warfare</h2>
+<p>Doodle-notebook battles with six weapons, ragdolls, upgrades and 30 campaign pages.</p>
+<div class="keys">A/D move &middot; W/Space jump &middot; Click fire &middot; G grenade</div>
+<span class="play">Play now</span>
+</div>
+</a>
+</main>
+</div>
+<footer><div class="wrap">&copy; Kaizen Games Collective. Best played with keyboard and mouse.</div></footer>
+</body>
+</html>
