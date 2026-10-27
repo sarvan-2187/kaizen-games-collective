@@ -1,0 +1,107 @@
+name: Game submission bot
+# Turns a "Submit a game" issue form into a pull request that a maintainer reviews.
+# The issue text and the uploaded zip are untrusted: they are only ever read as data
+# (passed through env vars, never interpolated into shell) and submitted code is never executed.
+on:
+  issues:
+    types: [opened, edited]
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+jobs:
+  ingest:
+    if: github.event.issue.state == 'open' && startsWith(github.event.issue.title, '[game submission]')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: game-submission-${{ github.event.issue.number }}
+      cancel-in-progress: true
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
+      ISSUE_AUTHOR: ${{ github.event.issue.user.login }}
+      ISSUE_BODY: ${{ github.event.issue.body }}
+      RESULT_FILE: ${{ runner.temp }}/result.json
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Label the issue and apply per-author limit
+        id: gate
+        run: |
+          gh label create game-submission --color 5319e7 --description "Game submitted through the form" 2>/dev/null || true
+          gh issue edit "$ISSUE_NUMBER" --add-label game-submission
+          open=$(gh issue list --author "$ISSUE_AUTHOR" --label game-submission --state open --json number --jq length)
+          if [ "$open" -gt 3 ]; then
+            gh issue comment "$ISSUE_NUMBER" --body "You already have 3 open game submissions. Please wait for those to be reviewed (or close one) before sending more."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fetch, check and unpack the game
+        if: steps.gate.outputs.skip != 'true'
+        run: node scripts/ingest-submission.mjs
+
+      - name: Report problems on the issue
+        if: steps.gate.outputs.skip != 'true'
+        run: |
+          if [ "$(jq -r .ok "$RESULT_FILE")" != "true" ]; then
+            jq -r '"Thanks for submitting! I found a few things to fix:\n\n" + (.errors | map("- " + (. | gsub("@"; "@​"))) | join("\n")) + "\n\n**Edit this issue** to fix them and I will check again automatically."' "$RESULT_FILE" > "$RUNNER_TEMP/comment.md"
+            gh issue comment "$ISSUE_NUMBER" --body-file "$RUNNER_TEMP/comment.md"
+          fi
+
+      - name: Open or update the pull request
+        if: steps.gate.outputs.skip != 'true'
+        run: |
+          set -euo pipefail
+          [ "$(jq -r .ok "$RESULT_FILE")" = "true" ] || exit 0
+          slug=$(jq -r .slug "$RESULT_FILE")
+          [[ "$slug" =~ ^[a-z0-9]+(-[a-z0-9]+)*$ ]] || { echo "bad slug"; exit 1; }
+          name=$(jq -r .name "$RESULT_FILE")
+          branch="submission/issue-$ISSUE_NUMBER"
+
+          git config user.name "kaizen-games-bot"
+          git config user.email "kaizen-games-bot@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add "games/$slug"
+          git commit -m "Add game: $name (from #$ISSUE_NUMBER)"
+          git push --force origin "$branch"
+
+          {
+            echo "Submitted through the form by @$ISSUE_AUTHOR in #$ISSUE_NUMBER."
+            echo
+            echo "Closes #$ISSUE_NUMBER"
+            echo
+            echo "### Game"
+            jq -r '"- **\(.manifest.name)** (`games/\(.slug)/`)\n- License: \(.manifest.license)\n- Controls: \((.manifest.controls // []) | join(", "))\n- Credited: \(.manifest.authors | map("@" + .github) | join(", "))"' "$RESULT_FILE"
+            if [ "$(jq '.warnings | length' "$RESULT_FILE")" -gt 0 ]; then
+              echo
+              echo "### Validator warnings"
+              jq -r '.warnings | map("- " + (. | gsub("@"; "@​"))) | join("\n")' "$RESULT_FILE"
+            fi
+            echo
+            echo "### Maintainer checklist"
+            echo "- [ ] I read the JavaScript (network calls, eval, storage, redirects). See docs/MAINTAINING.md"
+            echo "- [ ] I played it on desktop (and on a phone if it lists touch)"
+            echo "- [ ] Assets, license and all-ages content look right"
+          } > "$RUNNER_TEMP/pr.md"
+
+          gh label create game-submission --color 5319e7 2>/dev/null || true
+          existing=$(gh pr list --head "$branch" --state open --json number --jq '.[0].number // empty')
+          if [ -z "$existing" ]; then
+            if pr=$(gh pr create --base "${{ github.event.repository.default_branch }}" --head "$branch" --title "Add game: $name" --body-file "$RUNNER_TEMP/pr.md" --label game-submission); then
+              gh issue comment "$ISSUE_NUMBER" --body "All checks passed. I opened $pr for a maintainer to review. You will be notified there. If you need to change something, edit this issue and I will update the pull request."
+            else
+              gh issue comment "$ISSUE_NUMBER" --body "Your game passed the checks, but I could not open the pull request automatically. A maintainer has been notified."
+              exit 1
+            fi
+          else
+            gh issue comment "$ISSUE_NUMBER" --body "Updated the pull request (#$existing) with your changes."
+          fi
+          # PRs created with the default token do not trigger other workflows, so run the checks explicitly.
+          gh workflow run validate.yml --ref "$branch" || true

@@ -9,7 +9,29 @@ Thanks for wanting to add a game or fix one. This page covers everything you nee
 - **Report a bug** with the [bug report form](../../issues/new?template=bug_report.yml)
 - **Improve the platform**: home page, scripts, docs
 
-## Submit a game
+## Two ways to submit
+
+| | **Form** (no Git needed) | **Pull request** (traditional) |
+| --- | --- | --- |
+| Best for | Makers who just have a game folder | Anyone comfortable with Git |
+| How | Open the [Submit a game form](../../issues/new?template=game_submission.yml), fill it in and attach a `.zip` of your game | Fork, add `games/<slug>/`, open a PR |
+| What happens | A bot checks your game, then opens a pull request for you | CI checks your PR |
+| Review | A maintainer reviews the code either way | Same |
+| Credit | Your GitHub username is added as the author automatically | You list yourself in `game.json` |
+
+Both end in the same place: a pull request that a maintainer reads before the game goes live. The rules below apply to both.
+
+### Using the form
+
+1. Put your game in a folder. `index.html` must be the entry point, with extra files (images, audio, scripts) next to it, referenced by **relative** paths.
+2. Zip the folder. `index.html` can be at the top level of the zip or inside a single folder.
+3. Open the [Submit a game form](../../issues/new?template=game_submission.yml), fill it in, and **drag the `.zip` into the "Game files" box**. Wait for the link to appear before submitting. (GitHub issues can't hold the game's code as text, so a zip is required. Max 25 MB. Alternatively, give the address of a public GitHub repository.)
+4. Submit. Within a minute the bot comments on your issue: either a list of things to fix, or a link to your pull request.
+5. To fix problems, **edit your issue** (change the form answers or re-attach a zip). The bot re-checks and updates your pull request automatically. You can have up to 3 open submissions at once.
+
+The form can only create new games or update your own game. To change someone else's game, open a pull request.
+
+## Submit a game with a pull request
 
 ### 1. Make your game fit
 
@@ -75,6 +97,8 @@ npm run preview      # opens the full site at http://localhost:8080
 Test your game on a real phone if you claim touch support.
 
 ### 5. Open a pull request
+
+(If you used the form, skip this section; the bot does it for you.)
 
 - One game per pull request.
 - Touch only your own `games/<slug>/` folder, unless you are also fixing the platform. Keep unrelated changes out.

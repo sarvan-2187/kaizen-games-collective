@@ -163,7 +163,8 @@ footer b{color:var(--red);font-weight:700}
 
   <div class="sec"><span lang="ja">参加</span><i></i><em>JOIN IN</em></div>
   <div class="oss" id="oss">
-    <a id="lnk-submit" href="#"><b>Submit your game</b><span>Built a game in a single HTML file? Add it to the collective with a pull request.</span></a>
+    <a id="lnk-form" href="#"><b>Submit your game</b><span>Fill in a short form and attach a zip. No Git needed. We turn it into a pull request for you.</span></a>
+    <a id="lnk-submit" href="#"><b>Prefer Git?</b><span>Fork the repo and open a pull request. The guide covers the rules and the game.json format.</span></a>
     <a id="lnk-bug" href="#"><b>Report a bug</b><span>Found something broken in a game? Tell us and the maker will see it.</span></a>
     <a id="lnk-repo" href="#"><b>View the source</b><span>Everything here is open source. Read it, fork it, improve it.</span></a>
   </div>
@@ -188,7 +189,8 @@ footer b{color:var(--red);font-weight:700}
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
   function setRepoLinks(repo){
     var base='https://github.com/'+repo;
-    document.getElementById('lnk-submit').href=base+'/blob/main/CONTRIBUTING.md';
+    document.getElementById('lnk-form').href=base+'/issues/new?template=game_submission.yml';
+    document.getElementById('lnk-submit').href=base+'/blob/main/CONTRIBUTING.md#submit-a-game-with-a-pull-request';
     document.getElementById('lnk-bug').href=base+'/issues/new?template=bug_report.yml';
     document.getElementById('lnk-repo').href=base;
   }
@@ -226,8 +228,8 @@ footer b{color:var(--red);font-weight:700}
     games.forEach(function(g){grid.appendChild(card(g,repo))});
     var add=el('article','card add');var info=el('div','info');
     info.appendChild(el('span','tag','Open source'));
-    var h=el('h2');var al=el('a',null,'Your game here');al.href='https://github.com/'+repo+'/blob/main/CONTRIBUTING.md';al.rel='noopener';h.appendChild(al);info.appendChild(h);
-    info.appendChild(el('p',null,'One HTML file and a pull request is all it takes.'));add.appendChild(info);grid.appendChild(add);
+    var h=el('h2');var al=el('a',null,'Your game here');al.href='https://github.com/'+repo+'/issues/new?template=game_submission.yml';al.rel='noopener';h.appendChild(al);info.appendChild(h);
+    info.appendChild(el('p',null,'Use the form, or open a pull request.'));add.appendChild(info);grid.appendChild(add);
     var makers={};
     games.forEach(function(g){g.authors.forEach(function(au){if(!GH.test(au.github))return;var k=au.github.toLowerCase();(makers[k]=makers[k]||{name:au.name,github:au.github,games:[]}).games.push(g.name)})});
     var box=document.getElementById('makers'),keys=Object.keys(makers);

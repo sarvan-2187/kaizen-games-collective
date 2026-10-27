@@ -12,7 +12,8 @@ Examples we care about: a game that steals data or tracks players, code that esc
 
 Every game runs on the same web origin as the rest of the site, so it could in principle read another game's saved data (`localStorage`). To reduce that risk:
 
-- Every game's code is reviewed by a maintainer before it is merged.
+- Every game's code is reviewed by a maintainer before it is merged, including games that arrive through the submission form (a bot opens the pull request; it never merges).
+- The submission bot treats issue text and uploaded zips as untrusted data: no code from a submission is executed, zip paths and symlinks are rejected, and size limits apply.
 - CI blocks scripts and styles from unapproved hosts (see [CONTRIBUTING.md](CONTRIBUTING.md)).
 - The home page renders `game.json` content as plain text only and validates links.
 - Games must not collect personal data, show ads or use analytics.

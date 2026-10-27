@@ -42,10 +42,10 @@ export function walk(dir) {
 }
 
 /** Returns { manifest, errors, warnings } for one games/<slug> folder. */
-export function checkGame(slug) {
+export function checkGame(slug, gamesDir = GAMES_DIR) {
   const errors = [];
   const warnings = [];
-  const dir = path.join(GAMES_DIR, slug);
+  const dir = path.join(gamesDir, slug);
   const err = (m) => errors.push(`games/${slug}: ${m}`);
   const warn = (m) => warnings.push(`games/${slug}: ${m}`);
 

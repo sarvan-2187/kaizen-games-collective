@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        You don't need to open a proposal; you can send a pull request straight away (see CONTRIBUTING.md). Use this if you want feedback first.
+        You don't need to open a proposal; use the Submit a game form or send a pull request straight away (see CONTRIBUTING.md). Use this if you want feedback first.
   - type: input
     id: name
     attributes:

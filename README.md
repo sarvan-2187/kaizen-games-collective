@@ -17,11 +17,16 @@ The live site builds this list automatically from each game's `game.json`, inclu
 
 ## Submit your game
 
+Two ways, same review:
+
+- **No Git?** Use the [Submit a game form](../../issues/new?template=game_submission.yml): fill it in and attach a `.zip`. A bot checks it and opens the pull request for you.
+- **Prefer Git?** Fork and open a pull request:
+
 1. Fork the repo and copy `templates/game-template/` to `games/<your-game-slug>/`.
 2. Put your game in `index.html` (extra files like images and audio can sit next to it) and fill in `game.json`.
 3. Run `npm run validate` and `npm run preview`, then open a pull request.
 
-Full rules, the `game.json` fields and the review checklist are in [CONTRIBUTING.md](CONTRIBUTING.md).
+Either way a maintainer reviews the code before it goes live, and you are credited as the author. Full rules, the `game.json` fields and the review checklist are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Report a bug
 
@@ -34,7 +39,7 @@ index.html                 Home page (reads games.json at runtime)
 games/<slug>/index.html    One folder per game
 games/<slug>/game.json     Name, authors, license, controls, etc.
 templates/game-template/   Starter to copy for new games
-scripts/                   validate / build / preview (Node 20+, no dependencies)
+scripts/                   validate / build / preview / form-submission bot (Node 20+, no dependencies)
 .github/                   Issue forms, PR template, CI, CODEOWNERS
 docs/                      Maintainer notes
 ```
@@ -43,6 +48,7 @@ docs/                      Maintainer notes
 
 ```bash
 npm run validate   # check every game's game.json and files
+npm test           # tests for the form-submission bot
 npm run build      # build the site into _site/
 npm run preview    # build, then serve at http://localhost:8080
 ```

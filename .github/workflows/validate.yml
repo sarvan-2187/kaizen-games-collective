@@ -1,5 +1,6 @@
 name: Validate games
 on:
+  workflow_dispatch:
   pull_request:
   push:
     branches-ignore: [main]
@@ -15,5 +16,7 @@ jobs:
           node-version: 22
       - name: Validate every game
         run: npm run validate
+      - name: Run tests
+        run: npm test
       - name: Build the site
         run: npm run build

@@ -1,0 +1,127 @@
+name: Submit a game
+description: Add your game to the collective with a form. No Git or pull request needed.
+title: "[game submission] "
+labels: ["game-submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Submit your game
+
+        Fill in this form and a bot turns it into a pull request. A maintainer reviews the game before it goes live, and you are credited as the author.
+
+        **Before you start**
+        1. Put your game in a folder with `index.html` as the entry point (images, sounds and scripts can sit next to it). Use **relative** paths for your own files.
+        2. Zip the folder, then drag the `.zip` into the "Game files" box below. (Issues cannot hold a game's code as text, which is why we ask for a zip. Max 25 MB.)
+        3. Read the short [rules](https://github.com/sarvan-2187/kaizen-games-collective/blob/main/CONTRIBUTING.md#2-content-and-legal-rules). The bot checks them and replies on this issue if anything needs fixing. **Edit this issue** to fix problems; the bot re-runs automatically.
+
+        Prefer Git? You can [open a pull request instead](https://github.com/sarvan-2187/kaizen-games-collective/blob/main/CONTRIBUTING.md#two-ways-to-submit).
+  - type: input
+    id: name
+    attributes:
+      label: Game name
+      placeholder: Neon Snake
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: URL name
+      description: Lowercase letters, numbers and dashes. It becomes the game's web address.
+      placeholder: neon-snake
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Short description
+      description: One or two sentences (10-200 characters).
+      placeholder: Guide a glowing snake through a neon grid. How long can you get?
+    validations:
+      required: true
+  - type: input
+    id: display_name
+    attributes:
+      label: Your name (as shown in credits)
+      description: Your GitHub username is added automatically from this issue.
+    validations:
+      required: true
+  - type: input
+    id: coauthors
+    attributes:
+      label: Co-authors (GitHub usernames)
+      description: Optional. Comma-separated, for example `ada, grace`.
+  - type: dropdown
+    id: license
+    attributes:
+      label: License
+      description: Your game's source is public in this repo, so it must be open source. MIT is a good default.
+      options:
+        - MIT
+        - Apache-2.0
+        - BSD-2-Clause
+        - BSD-3-Clause
+        - ISC
+        - MPL-2.0
+        - GPL-3.0-only
+        - CC0-1.0
+        - CC-BY-4.0
+        - Unlicense
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: genre
+    attributes:
+      label: Genre
+      placeholder: Arcade
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Optional, up to 6, comma-separated.
+      placeholder: arcade, snake, casual
+  - type: checkboxes
+    id: controls
+    attributes:
+      label: Controls
+      description: Tick only what genuinely works. Phones are a big part of our players.
+      options:
+        - label: Keyboard
+        - label: Mouse
+        - label: Touch (phones and tablets)
+        - label: Gamepad
+  - type: input
+    id: accent
+    attributes:
+      label: Accent colour
+      description: Optional hex colour for your game's card.
+      placeholder: "#f472b6"
+  - type: input
+    id: jp_title
+    attributes:
+      label: Japanese title
+      description: Optional, 1-8 characters shown vertically on your card. Purely decorative.
+      placeholder: 蛇
+  - type: textarea
+    id: files
+    attributes:
+      label: Game files (ZIP)
+      description: Drag your `.zip` here and wait for the link to appear. `index.html` must be at the top level of the zip or inside one folder.
+  - type: input
+    id: repo_url
+    attributes:
+      label: Or a public GitHub repository
+      description: Instead of a zip. Use the repo address, or a folder address like `https://github.com/you/games/tree/main/neon-snake`.
+      placeholder: https://github.com/you/neon-snake
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I made this game or have the right to share everything in it, under the license I chose.
+          required: true
+        - label: It is suitable for all ages and has no ads, tracking, analytics or personal-data collection.
+          required: true
+        - label: I understand a maintainer will review the code and may ask for changes.
+          required: true
