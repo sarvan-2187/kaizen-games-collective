@@ -34,7 +34,7 @@ All games share one origin, so a malicious game could read another game's `local
 
 ## Form submissions (the bot)
 
-`.github/workflows/game-submission.yml` runs when someone opens or edits an issue titled `[game submission] ...` (created from `.github/ISSUE_TEMPLATE/game_submission.yml`). It:
+`.github/workflows/game-submission.yml` runs when someone opens or edits an open issue whose body contains the submission form's headings (created from `.github/ISSUE_TEMPLATE/game_submission.yml`). The title doesn't matter. It:
 
 1. Labels the issue `game-submission` and enforces a limit of 3 open submissions per person.
 2. Runs `scripts/ingest-submission.mjs`: reads the form, downloads the attached `.zip` (or clones the public repo), unpacks it safely (no `..` paths, no symlinks, size and file-count limits), writes `games/<slug>/game.json` with the **issue author as the credited author**, and runs the same validator as CI.

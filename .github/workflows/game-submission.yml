@@ -12,7 +12,11 @@ permissions:
   actions: write
 jobs:
   ingest:
-    if: github.event.issue.state == 'open' && startsWith(github.event.issue.title, '[game submission]')
+    # Recognise a submission by the form's own headings, not the title (people rename titles).
+    if: >-
+      github.event.issue.state == 'open' &&
+      contains(github.event.issue.body, '### URL name') &&
+      contains(github.event.issue.body, '### Game files (ZIP)')
     runs-on: ubuntu-latest
     concurrency:
       group: game-submission-${{ github.event.issue.number }}
