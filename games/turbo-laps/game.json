@@ -1,0 +1,25 @@
+{
+  "slug": "turbo-laps",
+  "name": "Turbo Laps",
+  "description": "Race two rivals over 3 laps of a looping circuit. Stay on the tarmac, grass slows you down.",
+  "authors": [
+    {
+      "name": "sarvan-2187",
+      "github": "sarvan-2187"
+    }
+  ],
+  "license": "MIT",
+  "version": "1.0.0",
+  "genre": "Racing",
+  "tags": [
+    "racing",
+    "laps",
+    "arcade"
+  ],
+  "controls": [
+    "keyboard",
+    "touch"
+  ],
+  "accent": "#e63946",
+  "jpTitle": "疾走"
+}
