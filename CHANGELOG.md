@@ -4,6 +4,10 @@ Every merged pull request is added here automatically, newest first.
 
 <!-- CHANGELOG:START -->
 
+## 2026-10-29
+
+- **New game:** [Project Phantom](https://sarvan-2187.github.io/kaizen-games-collective/games/project-phantom/) by [sarvan-2187](https://github.com/sarvan-2187) ([#6](https://github.com/sarvan-2187/kaizen-games-collective/pull/6))
+
 ## 2026-10-27
 
 - **New game:** [Kaizen Battle Royale](https://sarvan-2187.github.io/kaizen-games-collective/games/kaizen-battle-royale/) by [sarvan-2187](https://github.com/sarvan-2187) ([#5](https://github.com/sarvan-2187/kaizen-games-collective/pull/5))
