@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Phantom</title>
+<meta name="description" content="Project Phantom: a futuristic first-person stealth shooter. Infiltrate three hostile facilities, outsmart intelligent guards and extract.">
+<meta name="theme-color" content="#05080f">
+<link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="gl"></canvas>
+
+<!-- ===================== HUD ===================== -->
+<div id="hud" class="hidden">
+  <div id="vignette"></div>
+  <div id="scope"></div>
+  <div id="dmgdirs"></div>
+  <div id="markers"></div>
+  <canvas id="cross" width="128" height="128"></canvas>
+  <div id="hitmarker"><i></i><i></i><i></i><i></i></div>
+
+  <div id="hud-obj">
+    <div class="hud-title"><span id="hud-mission">MISSION</span><span id="hud-time">00:00</span></div>
+    <ul id="obj-list"></ul>
+    <div id="obj-bar"><b id="obj-fill"></b></div>
+  </div>
+
+  <canvas id="minimap" width="160" height="160"></canvas>
+
+  <div id="hud-top">
+    <div id="alarm-banner" class="hidden">ALARM TRIGGERED</div>
+    <div id="toast"></div>
+  </div>
+
+  <div id="hud-bl">
+    <div class="bar-row"><span class="lbl">HP</span><div class="bar hp"><b id="hp-fill"></b></div><span id="hp-num" class="num">100</span></div>
+    <div class="bar-row"><span class="lbl">ARM</span><div class="bar ar"><b id="ar-fill"></b></div><span id="ar-num" class="num">50</span></div>
+    <div class="stealth">
+      <div><span class="lbl">VISIBILITY</span><div class="bar sm"><b id="vis-fill"></b></div></div>
+      <div><span class="lbl">NOISE</span><div class="bar sm"><b id="noi-fill"></b></div></div>
+    </div>
+  </div>
+
+  <div id="hud-br">
+    <div id="weapon-name">SPECTRE-9</div>
+    <div class="ammo"><b id="ammo-mag">12</b><span>/</span><i id="ammo-res">60</i></div>
+    <div id="weapon-slots"></div>
+    <div id="ability"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17" class="trk"/><circle id="ab-ring" cx="20" cy="20" r="17" class="val"/></svg><span>Q</span><em>EMP</em></div>
+  </div>
+
+  <div id="prompt" class="hidden"><div class="key">E</div><div id="prompt-text">Interact</div><div id="prompt-bar" class="hidden"><b id="prompt-fill"></b></div></div>
+  <div id="reload-hint" class="hidden">RELOAD [R]</div>
+
+  <div id="tab-panel" class="hidden">
+    <h3>OBJECTIVES</h3>
+    <div id="tab-obj"></div>
+    <div id="tab-stats"></div>
+    <p class="dim">Release TAB to close</p>
+  </div>
+</div>
+
+<!-- pointer lock instruction -->
+<div id="lock-overlay" class="hidden">
+  <div class="lock-box"><h2>CLICK TO ENGAGE</h2><p>Mouse control must be captured by the game.<br>Click anywhere to resume; press <b>ESC</b> to pause.</p></div>
+</div>
+
+<!-- ===================== SCREENS ===================== -->
+<div id="screens">
+
+  <section class="screen active" id="s-menu">
+    <div class="menu-bg"></div>
+    <div class="menu-wrap">
+      <div class="logo"><small>CLASSIFIED // TIER-0</small><h1>PROJECT<br><span>PHANTOM</span></h1><p>Infiltrate. Observe. Eliminate. Vanish.</p></div>
+      <nav class="menu-list">
+        <button class="btn primary" id="btn-continue">Continue</button>
+        <button class="btn" id="btn-new">New Campaign</button>
+        <button class="btn" id="btn-missions">Mission Select</button>
+        <button class="btn" id="btn-armory">Armory</button>
+        <button class="btn" id="btn-settings">Settings</button>
+        <button class="btn" id="btn-credits">Credits</button>
+      </nav>
+      <div class="profile panel">
+        <div class="pf-row"><span>OPERATIVE LEVEL</span><b id="pf-level">1</b></div>
+        <div class="xpbar"><b id="pf-xp"></b></div>
+        <div class="pf-sub"><span id="pf-xptxt">0 XP</span><span>CREDITS <b id="pf-credits">0</b></span></div>
+        <div class="pf-grid">
+          <div><b id="pf-kills">0</b><span>KILLS</span></div>
+          <div><b id="pf-missions">0</b><span>MISSIONS</span></div>
+          <div><b id="pf-acc">0%</b><span>ACCURACY</span></div>
+        </div>
+      </div>
+      <div class="net-note" id="net-note">Requires an internet connection to load Three.js and fonts from a CDN.</div>
+      <div id="new-confirm" class="confirm hidden"><span>Erase saved progress and start over?</span><button class="btn danger sm" id="btn-new-yes">Erase &amp; start</button><button class="btn sm" id="btn-new-no">Cancel</button></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-missions">
+    <div class="menu-bg"></div>
+    <div class="page">
+      <header><button class="btn sm back" data-back>&larr; Back</button><h2>MISSION SELECT</h2></header>
+      <div id="mission-cards" class="cards"></div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-briefing">
+    <div class="menu-bg"></div>
+    <div class="page narrow">
+      <header><button class="btn sm back" data-back>&larr; Back</button><h2>MISSION BRIEFING</h2></header>
+      <div class="brief panel">
+        <div class="brief-head"><small id="br-code">OPERATION 01</small><h3 id="br-name">Mission</h3><p id="br-loc" class="dim">Location</p>
+          <div class="diff" id="br-diff"></div></div>
+        <p id="br-text"></p>
+        <div class="two">
+          <div><h4>OBJECTIVES</h4><ul id="br-obj" class="list"></ul></div>
+          <div><h4>FIELD NOTES</h4><ul id="br-tips" class="list tips"></ul></div>
+        </div>
+        <div class="loadout"><h4>LOADOUT</h4><div id="br-loadout"></div></div>
+        <div class="row end">
+          <button class="btn" id="br-armory">Armory</button>
+          <button class="btn primary big" id="br-deploy">Deploy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-armory">
+    <div class="menu-bg"></div>
+    <div class="page">
+      <header><button class="btn sm back" data-back>&larr; Back</button><h2>ARMORY</h2><div class="creds">CREDITS <b id="ar-credits">0</b></div></header>
+      <div class="armory">
+        <div id="weapon-list" class="wlist"></div>
+        <div id="weapon-detail" class="panel wdetail"></div>
+      </div>
+      <p class="dim hint">Equip up to 4 weapons. They map to keys 1&ndash;4 in the order shown.</p>
+    </div>
+  </section>
+
+  <section class="screen" id="s-settings">
+    <div class="menu-bg"></div>
+    <div class="page narrow">
+      <header><button class="btn sm back" data-back>&larr; Back</button><h2>SETTINGS</h2></header>
+      <div class="panel settings">
+        <label>Mouse sensitivity <input type="range" id="set-sens" min="0.2" max="3" step="0.05"><output id="o-sens"></output></label>
+        <label>ADS sensitivity <input type="range" id="set-ads" min="0.2" max="1.5" step="0.05"><output id="o-ads"></output></label>
+        <label>Field of view <input type="range" id="set-fov" min="60" max="110" step="1"><output id="o-fov"></output></label>
+        <label>Master volume <input type="range" id="set-vol" min="0" max="1" step="0.05"><output id="o-vol"></output></label>
+        <label>Graphics quality
+          <select id="set-quality"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High (shadows)</option></select></label>
+        <label>Difficulty
+          <select id="set-diff"><option value="easy">Easy</option><option value="normal">Normal</option><option value="hard">Hard</option></select></label>
+        <label class="chk"><input type="checkbox" id="set-invert"> Invert Y axis</label>
+        <label class="chk"><input type="checkbox" id="set-bob"> Weapon &amp; camera bob</label>
+        <label class="chk"><input type="checkbox" id="set-cones"> Show enemy vision cones</label>
+        <div class="row"><button class="btn danger sm" id="btn-reset">Erase save data</button><span class="dim" id="reset-msg"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-credits">
+    <div class="menu-bg"></div>
+    <div class="page narrow">
+      <header><button class="btn sm back" data-back>&larr; Back</button><h2>CREDITS</h2></header>
+      <div class="panel credits">
+        <h3>PROJECT PHANTOM</h3>
+        <p>A browser stealth-FPS built with HTML5, CSS3 and vanilla JavaScript. 3D by <b>Three.js</b> (MIT). All geometry, textures and audio are generated procedurally at runtime.</p>
+        <h4>CONTROLS</h4>
+        <div class="keys">
+          <span><kbd>W A S D</kbd> move</span><span><kbd>Mouse</kbd> look</span><span><kbd>LMB</kbd> fire</span><span><kbd>RMB</kbd> aim</span>
+          <span><kbd>Shift</kbd> sprint</span><span><kbd>Ctrl</kbd>/<kbd>C</kbd> crouch</span><span><kbd>Space</kbd> jump</span><span><kbd>R</kbd> reload</span>
+          <span><kbd>E</kbd> interact / takedown</span><span><kbd>Q</kbd> EMP pulse</span><span><kbd>1</kbd>&ndash;<kbd>4</kbd> weapons</span><span><kbd>Tab</kbd> objectives</span>
+          <span><kbd>Esc</kbd> pause</span><span><kbd>Wheel</kbd> cycle weapons</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-pause">
+    <div class="veil"></div>
+    <div class="page narrow center">
+      <h2 class="big-title">PAUSED</h2>
+      <div class="menu-list">
+        <button class="btn primary" id="p-resume">Resume</button>
+        <button class="btn" id="p-restart">Restart Mission</button>
+        <button class="btn" id="p-settings">Settings</button>
+        <button class="btn danger" id="p-abort">Abort Mission</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-complete">
+    <div class="veil"></div>
+    <div class="page narrow">
+      <div class="panel result ok">
+        <small>MISSION COMPLETE</small><h2 id="c-name">Mission</h2>
+        <div class="rank-row"><div class="rank" id="c-rank">S</div><div class="rank-info"><div id="c-score">Score 0</div><div class="dim" id="c-new"></div></div></div>
+        <table class="stats" id="c-stats"></table>
+        <div class="rewards"><div>+<b id="c-credits">0</b> CREDITS</div><div>+<b id="c-xp">0</b> XP</div></div>
+        <div id="c-unlock" class="unlock hidden"></div>
+        <div class="row end"><button class="btn" id="c-menu">Main Menu</button><button class="btn" id="c-replay">Replay</button><button class="btn primary" id="c-next">Next Mission</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-failed">
+    <div class="veil red"></div>
+    <div class="page narrow">
+      <div class="panel result bad">
+        <small>MISSION FAILED</small><h2 id="f-title">Operative down</h2><p id="f-reason" class="dim"></p>
+        <table class="stats" id="f-stats"></table>
+        <div class="row end"><button class="btn" id="f-menu">Main Menu</button><button class="btn primary" id="f-retry">Retry</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="screen" id="s-loading">
+    <div class="menu-bg"></div>
+    <div class="page narrow center"><h2 id="load-title">LOADING</h2><div class="spinner"></div><p id="load-msg" class="dim">Building facility&hellip;</p></div>
+  </section>
+
+  <section class="screen" id="s-error">
+    <div class="menu-bg"></div>
+    <div class="page narrow center"><h2>CANNOT START</h2><p id="err-msg" class="dim"></p><button class="btn primary" onclick="location.reload()">Reload</button></div>
+  </section>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script type="module" src="game.js"></script>
+</body>
+</html>

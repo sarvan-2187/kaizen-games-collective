@@ -1,0 +1,13 @@
+{
+  "slug": "project-phantom",
+  "name": "Project Phantom",
+  "jpTitle": "幻影計画",
+  "description": "Futuristic first-person stealth shooter. Infiltrate three hostile facilities, outsmart patrolling guards, drones and elite hunters, then extract.",
+  "authors": [{ "name": "sarvan-2187", "github": "sarvan-2187" }],
+  "license": "MIT",
+  "version": "1.0.0",
+  "genre": "3D stealth FPS",
+  "tags": ["fps", "stealth", "3d", "sci-fi", "single-player"],
+  "controls": ["keyboard", "mouse"],
+  "accent": "#33e0ff"
+}
